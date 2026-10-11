@@ -8,6 +8,7 @@
 - Protect the loopback API with Host/Origin/session-token checks and bounded input.
 - Replace the README with English setup, privacy, usage, and actual UI screenshots.
 - Correct Git ignore scope so report source code is included in clean checkouts.
+- Use default web port 4187 to separate this workspace from cached apps at a reused preview origin.
 
 ## 0.1.0-preview.1 — 2026-10-11
 

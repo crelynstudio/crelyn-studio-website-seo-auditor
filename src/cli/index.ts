@@ -12,7 +12,7 @@ const m = messages(lang);
 async function main() {
   if (args[0] === 'web') {
     if (args.length > 1 && (args.length !== 3 || args[1] !== '--port' || !/^\d+$/.test(args[2]!))) throw new Error('PORT_INVALID');
-    await startWebServer(args[2] ? Number(args[2]) : 4173); return;
+    await startWebServer(args[2] ? Number(args[2]) : 4187); return;
   }
   if (args.includes('--help')) { console.log(m.help); return; }
   if (args.includes('--version')) { console.log(VERSION); return; }

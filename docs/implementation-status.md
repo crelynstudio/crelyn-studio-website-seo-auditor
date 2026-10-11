@@ -36,4 +36,4 @@ Run the documented checks in README to reproduce. GitHub Actions provides the No
 
 ## Try it
 
-Run npm run web, open http://127.0.0.1:4173, start node examples/demo-server.mjs in a second terminal, and audit http://127.0.0.1:4765 with the trusted local network checkbox enabled. Expect 3 pages and 2 errors/2 warnings/2 information findings. Switch languages, filter findings, and open an exported HTML offline.
+Run npm run web, open http://127.0.0.1:4187, start node examples/demo-server.mjs in a second terminal, and audit http://127.0.0.1:4765 with the trusted local network checkbox enabled. Expect 3 pages and 2 errors/2 warnings/2 information findings. Switch languages, filter findings, and open an exported HTML offline.

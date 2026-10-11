@@ -17,13 +17,15 @@ npm ci --ignore-scripts
 npm run web
 ```
 
-Open **http://127.0.0.1:4173** in your browser. Enter the final HTTP(S) origin of a site you control, choose a page budget, and run the audit. The browser app defaults to 20 pages and allows up to 100. Stop the server with Ctrl+C. To change the port:
+Open **http://127.0.0.1:4187** in your browser. Enter the final HTTP(S) origin of a site you control, choose a page budget, and run the audit. The browser app defaults to 20 pages and allows up to 100. Stop the server with Ctrl+C. To change the port:
 
 ```sh
 npm run web -- --port 4180
 ```
 
 The app binds only to your computer's loopback address. It is a local tool, not a hosted multi-user service. Use the displayed 127.0.0.1 address, rather than localhost. English (US) is the default; choose Türkçe in the header. Your language choice is remembered locally when browser storage is available.
+
+If a browser keeps showing a different local project, use a fresh port with --port. A previously installed offline app can retain content for the same local origin. The default 4187 avoids the commonly reused 4173 preview address without clearing another project's browser data.
 
 ## What you can do
 

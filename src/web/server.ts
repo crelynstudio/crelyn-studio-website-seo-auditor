@@ -55,7 +55,7 @@ export function createWebServer() {
   return server;
 }
 
-export async function startWebServer(port = 4173) {
+export async function startWebServer(port = 4187) {
   if (!Number.isInteger(port) || port < 0 || port > 65535) throw new Error('PORT_INVALID');
   const server = createWebServer();
   await new Promise<void>((resolve, reject) => { server.once('error', reject); server.listen(port, '127.0.0.1', resolve); });

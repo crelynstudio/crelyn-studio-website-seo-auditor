@@ -18,12 +18,12 @@ export function parseConfig(args: string[]): ScanConfig {
     if (!/^\d+$/.test(raw) || !Number.isSafeInteger(n) || n < min || n > max) throw new Error('CONFIG_RANGE');
     return n;
   };
-  if (!['en', 'tr'].includes(values.lang!)) throw new Error('CONFIG_LANG');
+  if (!['en', 'en_US', 'tr'].includes(values.lang!)) throw new Error('CONFIG_LANG');
   if (!['error', 'warning', 'none'].includes(values['fail-on']!)) throw new Error('CONFIG_FAIL');
   const formats = [...new Set(values.format!.split(','))];
   if (!formats.length || formats.some(f => !['terminal', 'html', 'json'].includes(f))) throw new Error('CONFIG_FORMAT');
   return {
-    url: normalizeUrl(positionals[0]!), lang: values.lang as ScanConfig['lang'],
+    url: normalizeUrl(positionals[0]!), lang: values.lang === 'tr' ? 'tr' : 'en',
     maxPages: number('max-pages', 1, 1000), maxDepth: number('max-depth', 0, 10),
     concurrency: number('concurrency', 1, 2), timeout: number('timeout', 100, 60000),
     formats: formats as ScanConfig['formats'], output: values.output,

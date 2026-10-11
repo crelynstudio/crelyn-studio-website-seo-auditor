@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { parseConfig } from '../config/index.js';
-import { VERSION, type Lang } from '../core/types.js';
+import { VERSION, PRODUCT, type Lang } from '../core/types.js';
+import { startWebServer } from '../web/server.js';
 import { messages } from '../i18n/index.js';
 import { scan } from '../crawler/index.js';
 import { exitCode, writeReports } from '../reports/index.js';
@@ -9,10 +10,14 @@ const args = process.argv.slice(2);
 const lang: Lang = args[args.indexOf('--lang') + 1] === 'tr' || args.includes('--lang=tr') ? 'tr' : 'en';
 const m = messages(lang);
 async function main() {
+  if (args[0] === 'web') {
+    if (args.length > 1 && (args.length !== 3 || args[1] !== '--port' || !/^\d+$/.test(args[2]!))) throw new Error('PORT_INVALID');
+    await startWebServer(args[2] ? Number(args[2]) : 4173); return;
+  }
   if (args.includes('--help')) { console.log(m.help); return; }
   if (args.includes('--version')) { console.log(VERSION); return; }
   if (args.includes('--about')) {
-    console.log(`SiteMercek\n${m.developer}\nhttps://crelynstudio.com\nmailto:info@crelynstudio.com\nhttps://github.com/crelynstudio\nhttps://www.behance.net/crelynstudio\nhttps://www.instagram.com/crelynstudio/\nhttps://x.com/crelynstudio\nhttps://www.threads.com/@crelynstudio`); return;
+    console.log(`${PRODUCT}\n${m.developer}\nhttps://crelynstudio.com\nmailto:info@crelynstudio.com\nhttps://github.com/crelynstudio\nhttps://www.behance.net/crelynstudio\nhttps://www.instagram.com/crelynstudio/\nhttps://x.com/crelynstudio\nhttps://www.threads.com/@crelynstudio`); return;
   }
   let config;
   try { config = parseConfig(args); }

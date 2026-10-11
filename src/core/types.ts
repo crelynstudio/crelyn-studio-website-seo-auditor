@@ -1,4 +1,5 @@
-export const VERSION = '0.1.0-preview.1';
+export const VERSION = '0.2.0-preview.1';
+export const PRODUCT = 'Crelyn Website SEO Auditor';
 export type Lang = 'en' | 'tr';
 export type Severity = 'error' | 'warning' | 'info';
 export interface ScanConfig {

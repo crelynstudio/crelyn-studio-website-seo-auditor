@@ -8,7 +8,7 @@ export function parseHtml(body: string, page: CrawlPage): void {
   page.description = $('meta').filter((_, e) => ($(e).attr('name') ?? '').toLowerCase() === 'description').first().attr('content')?.trim() ?? '';
   page.h1 = $('h1').length;
   page.canonicals = $('link').filter((_, e) => ($(e).attr('rel') ?? '').toLowerCase().split(/\s+/).includes('canonical')).map((_, e) => $(e).attr('href') ?? '').get();
-  const robots = $('meta').filter((_, e) => ['robots', 'sitemercek'].includes(($(e).attr('name') ?? '').toLowerCase())).map((_, e) => $(e).attr('content') ?? '').get().join(',') + ',' + (page.headers['x-robots-tag'] ?? '');
+  const robots = $('meta').filter((_, e) => ['robots', 'crelynseoauditor'].includes(($(e).attr('name') ?? '').toLowerCase())).map((_, e) => $(e).attr('content') ?? '').get().join(',') + ',' + (page.headers['x-robots-tag'] ?? '');
   page.noindex = /\b(noindex|none)\b/i.test(robots);
   let base = page.finalUrl;
   try { base = normalizeUrl($('base[href]').first().attr('href') ?? '', base); } catch { /* Invalid base falls back to document URL. */ }

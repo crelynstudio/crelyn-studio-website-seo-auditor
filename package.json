@@ -1,9 +1,13 @@
 {
-  "name": "@crelynstudio/sitemercek",
-  "version": "0.1.0-preview.1",
-  "description": "Evidence-based website health and technical SEO CLI",
+  "name": "@crelynstudio/website-seo-auditor",
+  "version": "0.2.0-preview.1",
+  "description": "Local website audit tool for broken links and technical SEO with browser UI and CLI",
+  "repository": { "type": "git", "url": "https://github.com/crelynstudio/crelyn-studio-website-seo-auditor.git" },
+  "bugs": { "url": "https://github.com/crelynstudio/crelyn-studio-website-seo-auditor/issues" },
+  "keywords": ["website-audit", "technical-seo", "seo", "broken-links", "crawler", "cli"],
   "type": "module",
   "bin": {
+    "site-audit": "dist/src/cli/index.js",
     "sitemercek": "dist/src/cli/index.js"
   },
   "engines": {
@@ -15,7 +19,6 @@
     "docs",
     "examples/demo-server.mjs",
     "README.md",
-    "README.tr.md",
     "CONTRIBUTING.md",
     "SECURITY.md",
     "CODE_OF_CONDUCT.md",
@@ -24,6 +27,7 @@
   ],
   "scripts": {
     "dev": "npm run build --silent && node dist/src/cli/index.js",
+    "web": "npm run build --silent && node dist/src/cli/index.js web",
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src tests",

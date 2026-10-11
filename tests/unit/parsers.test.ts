@@ -10,13 +10,13 @@ import type { CrawlPage, ScanReport } from '../../src/core/types.js';
 import { parseConfig } from '../../src/config/index.js';
 
 test('robots specific groups merge, allow wins tie, longest path and wildcards', () => {
-  const r = parseRobots('User-agent: *\nDisallow: /\nUser-agent: SiteMercek\nDisallow: /secret\nAllow: /secret/open\nDisallow: /*.pdf$\nUser-agent: sitemercek\nAllow: /tie\nDisallow: /tie');
+  const r = parseRobots('User-agent: *\nDisallow: /\nUser-agent: CrelynSEOAuditor\nDisallow: /secret\nAllow: /secret/open\nDisallow: /*.pdf$\nUser-agent: crelynseoauditor\nAllow: /tie\nDisallow: /tie');
   for (const path of ['/secret', '/secret/deep', '/a.pdf']) assert.equal(r.allowed('https://x.test' + path), false);
   for (const path of ['/', '/secret/open', '/tie', '/a.pdf?q=1']) assert.equal(r.allowed('https://x.test' + path), true);
   assert.equal(parseRobots('User-agent: *\nDisallow: /').allowed('https://x.test/'), false);
 });
 test('robots UTF-8 and percent encoding, case sensitive paths, empty directives', () => {
-  const r = parseRobots('User-agent: SiteMercek\nDisallow: /café\nDisallow: /%62\nDisallow: /a%2fb\nDisallow: /Case\nDisallow:\nAllow:');
+  const r = parseRobots('User-agent: CrelynSEOAuditor\nDisallow: /café\nDisallow: /%62\nDisallow: /a%2fb\nDisallow: /Case\nDisallow:\nAllow:');
   for (const path of ['/caf%C3%A9', '/b', '/a%2Fb', '/Case']) assert.equal(r.allowed('https://x.test' + path), false, path);
   for (const path of ['/a/b', '/case', '/']) assert.equal(r.allowed('https://x.test' + path), true, path);
 });
@@ -58,12 +58,13 @@ test('EN/TR catalogs have identical keys and translated rule messages', () => {
     assert.ok(value.length); assert.ok(catalog.tr[key as keyof typeof catalog.tr].length);
   }
 });
-test('report escapes malicious site text, has no active scripts and correct exit semantics', async () => {
+test('report escapes malicious site text, allows only its hashed local script and correct exit semantics', async () => {
   const config = parseConfig(['https://x.test', '--lang', 'tr', '--fail-on', 'warning']);
   const report: ScanReport = { schemaVersion: '1', version: 'test', target: config.url, config, status: 'complete', startedAt: '2026-10-11T00:00:00.000Z', finishedAt: '2026-10-11T00:00:01.000Z', pages: [], findings: [finding('SEO_002', 'warning', config.url, '<script>alert(1)</script>', 'tr')], summary: { crawled: 1, discovered: 1, skipped: 0, errors: 0, warnings: 1, info: 0 }, skippedChecks: [], limitations: [] };
   const output = await html(report);
-  assert.ok(output.includes('&lt;script&gt;alert(1)&lt;/script&gt;')); assert.ok(!output.includes('<script'));
-  assert.ok(output.includes('script-src \'none\'')); assert.ok(output.includes('lang="tr"'));
+  assert.ok(output.includes('\\u003cscript>alert(1)\\u003c/script>')); assert.ok(!output.includes('<script>alert(1)'));
+  assert.equal((output.match(/<script>/g) ?? []).length, 1);
+  assert.ok(output.includes("script-src 'sha256-")); assert.ok(output.includes("connect-src 'none'")); assert.ok(output.includes('lang="tr"'));
   assert.equal(escapeHtml('"\'&<>'), '&quot;&#39;&amp;&lt;&gt;');
   assert.equal(exitCode(report), 2); report.config.failOn = 'none'; assert.equal(exitCode(report), 0);
   report.status = 'truncated'; assert.equal(exitCode(report), 1);

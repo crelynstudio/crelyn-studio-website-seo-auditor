@@ -28,7 +28,7 @@ function document(res: http.ServerResponse, body = '<title>Example</title><meta 
 
 test('end-to-end crawl, robots, sitemap index, deduplication, broken links and non-HTML', async () => {
   const s = await site((req, res) => {
-    if (req.url === '/robots.txt') { res.end('User-agent: SiteMercek\nDisallow: /private\nAllow: /private/open'); return; }
+    if (req.url === '/robots.txt') { res.end('User-agent: CrelynSEOAuditor\nDisallow: /private\nAllow: /private/open'); return; }
     if (req.url === '/sitemap.xml') { res.end('<sitemapindex><sitemap><loc>/map.xml</loc></sitemap></sitemapindex>'); return; }
     if (req.url === '/map.xml') { res.end('<urlset><url><loc>/about</loc></url></urlset>'); return; }
     if (req.url === '/') { document(res, '<title>Türkçe</title><a href="/about#x">A</a><a href="/about#y">B</a><a href="/missing">C</a><a href="/private">D</a><a href="/file">File</a><a href="https://example.com">External</a>'); return; }
@@ -149,7 +149,7 @@ test('built CLI help/version/about, local JSON/HTML output and exit codes 0/1/2'
   const directory = await mkdtemp(join(resolve('tests'), '.tmp-'));
   try {
     assert.ok((await cli(['--help', '--lang', 'tr'])).stdout.includes('Kullanım'));
-    assert.ok((await cli(['--version'])).stdout.includes('0.1.0'));
+    assert.ok((await cli(['--version'])).stdout.includes('0.2.0'));
     assert.ok((await cli(['--about'])).stdout.includes('Crelyn Studio'));
     assert.equal((await cli(['file:///bad'])).code, 1);
     assert.equal((await cli([s.origin])).code, 1);

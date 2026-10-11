@@ -1,9 +1,9 @@
 {
   "schemaVersion": "1",
-  "version": "0.1.0-preview.1",
+  "version": "0.2.0-preview.1",
   "target": "http://127.0.0.1:4765/",
-  "startedAt": "2026-10-11T04:01:42.807Z",
-  "finishedAt": "2026-10-11T04:01:44.860Z",
+  "startedAt": "2026-10-11T14:18:25.303Z",
+  "finishedAt": "2026-10-11T14:18:27.349Z",
   "status": "complete",
   "config": {
     "url": "http://127.0.0.1:4765/",
@@ -16,7 +16,7 @@
       "html",
       "json"
     ],
-    "output": "docs/examples",
+    "output": ".verification/current-examples",
     "failOn": "none",
     "allowPrivateNetwork": true
   },
@@ -36,9 +36,9 @@
       "redirects": [],
       "headers": {
         "content-type": "text/html; charset=utf-8",
-        "date": "Sun, 11 Oct 2026 04:01:43 GMT",
+        "date": "Sun, 11 Oct 2026 14:18:26 GMT",
         "connection": "close",
-        "content-length": "237"
+        "content-length": "245"
       },
       "html": true,
       "links": [
@@ -57,7 +57,7 @@
       ],
       "status": 200,
       "title": "Örnek Atölye",
-      "description": "SiteMercek için yapay test sitesi",
+      "description": "Crelyn SEO Auditor için yapay test sitesi",
       "h1": 1,
       "canonicals": [],
       "noindex": false,
@@ -71,7 +71,7 @@
       "redirects": [],
       "headers": {
         "content-type": "text/html; charset=utf-8",
-        "date": "Sun, 11 Oct 2026 04:01:44 GMT",
+        "date": "Sun, 11 Oct 2026 14:18:26 GMT",
         "connection": "close",
         "content-length": "173"
       },
@@ -93,7 +93,7 @@
       "redirects": [],
       "headers": {
         "content-type": "text/html; charset=utf-8",
-        "date": "Sun, 11 Oct 2026 04:01:44 GMT",
+        "date": "Sun, 11 Oct 2026 14:18:27 GMT",
         "connection": "close",
         "transfer-encoding": "chunked"
       },

@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "SiteMercek ScanReport v1",
+  "title": "Crelyn Website SEO Auditor ScanReport v1",
   "type": "object",
   "required": ["schemaVersion", "version", "target", "startedAt", "finishedAt", "status", "config", "summary", "pages", "findings", "skippedChecks", "limitations"],
   "additionalProperties": false,

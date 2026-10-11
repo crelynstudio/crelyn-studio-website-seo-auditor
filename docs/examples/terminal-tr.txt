@@ -1,8 +1,7 @@
-Command / Komut:
-node dist/src/cli/index.js audit http://127.0.0.1:4765 --allow-private-network --lang tr --format terminal,html,json --output docs/examples
+Synthetic local fixture / Yapay yerel test sitesi
+node dist/src/cli/index.js audit http://127.0.0.1:4765 --allow-private-network --lang tr
 
-Actual stdout / Gerçek standart çıktı:
-SiteMercek 0.1.0-preview.1 | Tarama özeti
+Crelyn Website SEO Auditor 0.2.0-preview.1 | Tarama özeti
 http://127.0.0.1:4765/
 Tamamlandı | Sayfalar: 3 | Atlanan: 1
 Hata: 2 | Uyarı: 2 | Bilgi: 2

@@ -1,0 +1,16 @@
+node_modules/
+dist/
+reports/
+*.tgz
+.env
+.env.*
+!.env.example
+AGENTS.md
+*.log
+.DS_Store
+Thumbs.db
+coverage/
+tests/.tmp-*/
+.verification/
+.idea/
+.vscode/

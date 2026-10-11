@@ -1,0 +1,77 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SiteMercek ScanReport v1",
+  "type": "object",
+  "required": ["schemaVersion", "version", "target", "startedAt", "finishedAt", "status", "config", "summary", "pages", "findings", "skippedChecks", "limitations"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "const": "1" },
+    "version": { "type": "string" },
+    "target": { "type": "string" },
+    "startedAt": { "type": "string" },
+    "finishedAt": { "type": "string" },
+    "status": { "enum": ["complete", "truncated", "aborted"] },
+    "config": {
+      "type": "object",
+      "required": ["url", "lang", "maxPages", "maxDepth", "concurrency", "timeout", "formats", "failOn", "allowPrivateNetwork"],
+      "additionalProperties": false,
+      "properties": {
+        "url": { "type": "string" }, "lang": { "enum": ["en", "tr"] },
+        "maxPages": { "type": "integer", "minimum": 1, "maximum": 1000 },
+        "maxDepth": { "type": "integer", "minimum": 0, "maximum": 10 },
+        "concurrency": { "type": "integer", "minimum": 1, "maximum": 2 },
+        "timeout": { "type": "integer", "minimum": 100, "maximum": 60000 },
+        "formats": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["terminal", "html", "json"] } },
+        "output": { "type": "string" }, "failOn": { "enum": ["none", "error", "warning"] },
+        "allowPrivateNetwork": { "type": "boolean" }
+      }
+    },
+    "summary": {
+      "type": "object", "required": ["discovered", "crawled", "skipped", "errors", "warnings", "info"],
+      "additionalProperties": false,
+      "properties": {
+        "discovered": { "type": "integer", "minimum": 0 }, "crawled": { "type": "integer", "minimum": 0 },
+        "skipped": { "type": "integer", "minimum": 0 }, "errors": { "type": "integer", "minimum": 0 },
+        "warnings": { "type": "integer", "minimum": 0 }, "info": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "pages": { "type": "array", "items": { "$ref": "#/definitions/page" } },
+    "findings": { "type": "array", "items": { "$ref": "#/definitions/finding" } },
+    "skippedChecks": { "type": "array", "items": {
+      "type": "object", "required": ["url", "reason", "checks"], "additionalProperties": false,
+      "properties": { "url": { "type": "string" }, "reason": { "type": "string" }, "checks": { "type": "array", "items": { "type": "string" } } }
+    } },
+    "limitations": { "type": "array", "items": { "type": "string" } }
+  },
+  "definitions": {
+    "link": {
+      "type": "object", "required": ["sourceUrl", "raw", "kind"], "additionalProperties": false,
+      "properties": { "sourceUrl": { "type": "string" }, "raw": { "type": "string" }, "targetUrl": { "type": "string" }, "kind": { "enum": ["internal", "external", "fragment", "mailto", "tel", "invalid", "unsupported"] } }
+    },
+    "page": {
+      "type": "object", "required": ["url", "finalUrl", "depth", "redirects", "headers", "html", "links"], "additionalProperties": false,
+      "properties": {
+        "url": { "type": "string" }, "finalUrl": { "type": "string" }, "depth": { "type": "integer", "minimum": 0 },
+        "status": { "type": "integer", "minimum": 100, "maximum": 599 }, "redirects": { "type": "array", "items": { "type": "string" } },
+        "headers": { "type": "object", "additionalProperties": { "type": "string" } }, "html": { "type": "boolean" },
+        "links": { "type": "array", "items": { "$ref": "#/definitions/link" } }, "error": { "type": "string" },
+        "title": { "type": "string" }, "description": { "type": "string" }, "h1": { "type": "integer", "minimum": 0 },
+        "canonicals": { "type": "array", "items": { "type": "string" } }, "noindex": { "type": "boolean" },
+        "baseUrl": { "type": "string" }, "discoveryLimited": { "type": "boolean" }
+      }
+    },
+    "finding": {
+      "type": "object",
+      "required": ["ruleId", "severity", "result", "confidence", "url", "observed", "expected", "messageKey", "params", "message", "recommendation", "docsUrl"],
+      "additionalProperties": false,
+      "properties": {
+        "ruleId": { "type": "string", "pattern": "^[A-Z]+_[0-9]{3}$" }, "severity": { "enum": ["error", "warning", "info"] },
+        "result": { "enum": ["failed", "passed", "skipped"] }, "confidence": { "enum": ["certain", "heuristic"] },
+        "url": { "type": "string" }, "sourceUrl": { "type": "string" }, "targetUrl": { "type": "string" },
+        "observed": {}, "expected": { "type": "string" }, "messageKey": { "type": "string" },
+        "params": { "type": "object", "additionalProperties": { "type": "string" } },
+        "message": { "type": "string" }, "recommendation": { "type": "string" }, "docsUrl": { "type": "string" }
+      }
+    }
+  }
+}

@@ -1,0 +1,5 @@
+# Contributing / Katkı
+
+Install Node 24, run `npm ci`, then `npm run typecheck`, `npm run lint`, `npm test`, `npm run build`. Keep changes narrow. New rules need stable IDs, EN/TR messages, evidence, severity, false-positive notes and local fixture tests. Route all network access through SafeHttp. Never disable TLS or robots, add telemetry, or use live third-party sites in tests. Discuss scope changes before implementation. Follow [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md). Proposed repository: `crelynstudio/crelyn-studio-sitemercek`; not published yet.
+
+Node 24 kurun, `npm ci` sonrasında yukarıdaki kontrolleri çalıştırın. Değişiklikleri dar tutun. Yeni kurala kararlı kimlik, EN/TR metin, kanıt, önem derecesi, yanlış alarm açıklaması ve yerel test ekleyin. Ağ erişimini SafeHttp üzerinden yapın. TLS/robots denetimini kaldırmayın; telemetri eklemeyin; testlerde canlı üçüncü taraf siteler kullanmayın. Kapsam değişikliğini önce konuşun. [Davranış kurallarına](CODE_OF_CONDUCT.md) uyun. Önerilen depo henüz yayımlanmadı.

@@ -1,0 +1,46 @@
+{
+  "name": "@crelynstudio/sitemercek",
+  "version": "0.1.0-preview.1",
+  "description": "Evidence-based website health and technical SEO CLI",
+  "type": "module",
+  "bin": {
+    "sitemercek": "dist/src/cli/index.js"
+  },
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "files": [
+    "dist/src",
+    "assets",
+    "docs",
+    "examples/demo-server.mjs",
+    "README.md",
+    "README.tr.md",
+    "CONTRIBUTING.md",
+    "SECURITY.md",
+    "CODE_OF_CONDUCT.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "dev": "npm run build --silent && node dist/src/cli/index.js",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src tests",
+    "test": "npm run build --silent && node --test dist/tests/unit/*.test.js dist/tests/integration/*.test.js",
+    "prepack": "npm run build"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "cheerio": "1.2.0",
+    "fast-xml-parser": "5.11.2",
+    "ipaddr.js": "2.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.0",
+    "ajv": "8.20.0",
+    "eslint": "10.12.0",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.71.1"
+  }
+}

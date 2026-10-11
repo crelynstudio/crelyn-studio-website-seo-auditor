@@ -1,0 +1,223 @@
+{
+  "schemaVersion": "1",
+  "version": "0.1.0-preview.1",
+  "target": "http://127.0.0.1:4765/",
+  "startedAt": "2026-10-11T04:01:42.807Z",
+  "finishedAt": "2026-10-11T04:01:44.860Z",
+  "status": "complete",
+  "config": {
+    "url": "http://127.0.0.1:4765/",
+    "lang": "tr",
+    "maxPages": 100,
+    "maxDepth": 4,
+    "concurrency": 2,
+    "timeout": 10000,
+    "formats": [
+      "html",
+      "json"
+    ],
+    "output": "docs/examples",
+    "failOn": "none",
+    "allowPrivateNetwork": true
+  },
+  "summary": {
+    "discovered": 3,
+    "crawled": 3,
+    "skipped": 1,
+    "errors": 2,
+    "warnings": 2,
+    "info": 2
+  },
+  "pages": [
+    {
+      "url": "http://127.0.0.1:4765/",
+      "finalUrl": "http://127.0.0.1:4765/",
+      "depth": 0,
+      "redirects": [],
+      "headers": {
+        "content-type": "text/html; charset=utf-8",
+        "date": "Sun, 11 Oct 2026 04:01:43 GMT",
+        "connection": "close",
+        "content-length": "237"
+      },
+      "html": true,
+      "links": [
+        {
+          "sourceUrl": "http://127.0.0.1:4765/",
+          "raw": "/about",
+          "kind": "internal",
+          "targetUrl": "http://127.0.0.1:4765/about"
+        },
+        {
+          "sourceUrl": "http://127.0.0.1:4765/",
+          "raw": "/missing",
+          "kind": "internal",
+          "targetUrl": "http://127.0.0.1:4765/missing"
+        }
+      ],
+      "status": 200,
+      "title": "Örnek Atölye",
+      "description": "SiteMercek için yapay test sitesi",
+      "h1": 1,
+      "canonicals": [],
+      "noindex": false,
+      "baseUrl": "http://127.0.0.1:4765/",
+      "discoveryLimited": false
+    },
+    {
+      "url": "http://127.0.0.1:4765/about",
+      "finalUrl": "http://127.0.0.1:4765/about",
+      "depth": 0,
+      "redirects": [],
+      "headers": {
+        "content-type": "text/html; charset=utf-8",
+        "date": "Sun, 11 Oct 2026 04:01:44 GMT",
+        "connection": "close",
+        "content-length": "173"
+      },
+      "html": true,
+      "links": [],
+      "status": 200,
+      "title": "Örnek Atölye",
+      "description": "",
+      "h1": 1,
+      "canonicals": [],
+      "noindex": true,
+      "baseUrl": "http://127.0.0.1:4765/about",
+      "discoveryLimited": false
+    },
+    {
+      "url": "http://127.0.0.1:4765/missing",
+      "finalUrl": "http://127.0.0.1:4765/missing",
+      "depth": 1,
+      "redirects": [],
+      "headers": {
+        "content-type": "text/html; charset=utf-8",
+        "date": "Sun, 11 Oct 2026 04:01:44 GMT",
+        "connection": "close",
+        "transfer-encoding": "chunked"
+      },
+      "html": true,
+      "links": [],
+      "status": 404
+    }
+  ],
+  "findings": [
+    {
+      "ruleId": "HTTP_001",
+      "severity": "error",
+      "result": "failed",
+      "confidence": "certain",
+      "url": "http://127.0.0.1:4765/missing",
+      "observed": 404,
+      "expected": "400 altı HTTP durum kodu",
+      "messageKey": "HTTP_001",
+      "params": {},
+      "message": "HTTP isteği başarısız.",
+      "recommendation": "Kaynağı düzeltin veya bağlantıyı çalışan bir adrese yöneltin.",
+      "docsUrl": "docs/rules.md#http_001"
+    },
+    {
+      "ruleId": "IDX_001",
+      "severity": "info",
+      "result": "failed",
+      "confidence": "certain",
+      "url": "http://127.0.0.1:4765/about",
+      "observed": {
+        "noindex": true
+      },
+      "expected": "İndeksleme bildirimi site amacına uygun",
+      "messageKey": "IDX_001",
+      "params": {},
+      "message": "Sayfa noindex bildiriyor.",
+      "recommendation": "Bu tercihin indeksleme amacınızla uyumlu olduğunu doğrulayın.",
+      "docsUrl": "docs/rules.md#idx_001"
+    },
+    {
+      "ruleId": "LINK_001",
+      "severity": "error",
+      "result": "failed",
+      "confidence": "certain",
+      "url": "http://127.0.0.1:4765/",
+      "observed": {
+        "status": 404
+      },
+      "expected": "Erişilebilir başarılı hedef",
+      "messageKey": "LINK_001",
+      "params": {},
+      "message": "Dahili bağlantı başarısız bir kaynağa gidiyor.",
+      "recommendation": "Hedef kaynağı düzeltin veya kaynak sayfadaki bağlantıyı güncelleyin.",
+      "docsUrl": "docs/rules.md#link_001",
+      "sourceUrl": "http://127.0.0.1:4765/",
+      "targetUrl": "http://127.0.0.1:4765/missing"
+    },
+    {
+      "ruleId": "SEO_002",
+      "severity": "warning",
+      "result": "failed",
+      "confidence": "heuristic",
+      "url": "http://127.0.0.1:4765/",
+      "observed": {
+        "title": "Örnek Atölye",
+        "urls": [
+          "http://127.0.0.1:4765/",
+          "http://127.0.0.1:4765/about"
+        ]
+      },
+      "expected": "Sayfaya özgü başlıklar",
+      "messageKey": "SEO_002",
+      "params": {},
+      "message": "Birden fazla sayfa aynı başlığı kullanıyor.",
+      "recommendation": "İçerikleri farklı olan sayfalara özgü başlıklar kullanın.",
+      "docsUrl": "docs/rules.md#seo_002"
+    },
+    {
+      "ruleId": "SEO_002",
+      "severity": "warning",
+      "result": "failed",
+      "confidence": "heuristic",
+      "url": "http://127.0.0.1:4765/about",
+      "observed": {
+        "title": "Örnek Atölye",
+        "urls": [
+          "http://127.0.0.1:4765/",
+          "http://127.0.0.1:4765/about"
+        ]
+      },
+      "expected": "Sayfaya özgü başlıklar",
+      "messageKey": "SEO_002",
+      "params": {},
+      "message": "Birden fazla sayfa aynı başlığı kullanıyor.",
+      "recommendation": "İçerikleri farklı olan sayfalara özgü başlıklar kullanın.",
+      "docsUrl": "docs/rules.md#seo_002"
+    },
+    {
+      "ruleId": "SEO_003",
+      "severity": "info",
+      "result": "failed",
+      "confidence": "heuristic",
+      "url": "http://127.0.0.1:4765/about",
+      "observed": "",
+      "expected": "Uygun olduğunda yararlı meta açıklaması",
+      "messageKey": "SEO_003",
+      "params": {},
+      "message": "Meta açıklaması boş veya eksik.",
+      "recommendation": "Arama özeti için yararlı bir açıklama düşünün; bu bir sıralama garantisi değildir.",
+      "docsUrl": "docs/rules.md#seo_003"
+    }
+  ],
+  "skippedChecks": [
+    {
+      "url": "http://127.0.0.1:4765/missing",
+      "reason": "HTTP_ERROR",
+      "checks": [
+        "seo"
+      ]
+    }
+  ],
+  "limitations": [
+    "Yalnızca statik HTTP; JavaScript sonrası DOM, oturum ve erişilebilirlik denetlenmez.",
+    "Harici kökenler, formlar ve kimlik doğrulama izlenmez. Genel sağlık puanı verilmez.",
+    "Robots tarafından engellenen adresler ve bütçe sınırları raporda belirtilir. Bulgular taranan kapsamla sınırlıdır."
+  ]
+}

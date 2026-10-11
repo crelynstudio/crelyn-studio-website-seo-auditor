@@ -1,0 +1,27 @@
+import { readFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import type { ScanReport } from '../core/types.js';
+import { PRODUCT, VERSION } from '../core/types.js';
+import { catalog, limitations } from '../i18n/index.js';
+import { redact } from './privacy.js';
+
+export async function renderHtml(report: ScanReport): Promise<string> {
+  report = redact(report);
+  const root = new URL('../../../assets/', import.meta.url);
+  const [css, js, logo] = await Promise.all([
+    readFile(new URL('report.css', root), 'utf8'), readFile(new URL('report.js', root), 'utf8'), readFile(new URL('CRELYN-DARK.png', root))
+  ]);
+  const data = JSON.stringify({ report, catalog, limitations: { en: limitations('en'), tr: limitations('tr') } }).replace(/</g, '\\u003c');
+  const script = `const bootstrap=${data};\n${js.replace(/\r\n?/g, '\n')}`;
+  const hash = createHash('sha256').update(script).digest('base64');
+  const csp = `default-src 'none'; img-src data:; style-src 'unsafe-inline'; script-src 'sha256-${hash}'; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'`;
+  return `<!doctype html><html lang="${report?.config.lang === 'tr' ? 'tr' : 'en-US'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta http-equiv="Content-Security-Policy" content="${csp}"><meta name="description" content="Local website health and technical SEO audits with evidence, broken link checks, and private HTML/JSON reports."><title>${PRODUCT}</title><style>${css}</style></head><body>
+  <a class="skip-link" href="#workspace" data-i18n="skipLink">Skip to workspace</a>
+  <header class="topbar"><a class="wordmark" href="#workspace"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M6 8h12v16H6zM12 4h14v16M11 13h2m-2 5h2m5-5h3"/></svg><span><strong>SiteMercek</strong></span></a><div class="top-actions"><span class="local-label" data-i18n="local">Runs on your device</span><label class="language"><span class="sr-only" data-i18n="language">Language</span><select id="language"><option value="en_US">English (US)</option><option value="tr">Türkçe</option></select></label></div></header>
+  <div class="shell"><aside class="sidebar"><p class="nav-title" data-i18n="workspace">Workspace</p><a class="nav-link selected" href="#workspace" data-i18n="audit">Website audit</a><a class="nav-link" href="#findings" data-i18n="findings">Findings</a><a class="nav-link" href="#scope" data-i18n="scope">Scope & limits</a><div class="privacy-note"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4-4 7-8 9-4-2-8-5-8-9V6zM8 12l3 3 5-6"/></svg><strong data-i18n="privacyTitle">Your audits stay yours.</strong><p data-i18n="privacyText">No accounts, API keys, or uploads to Crelyn Studio.</p></div><p class="version">v${VERSION}</p></aside>
+  <main id="workspace"><section class="page-heading"><div><h1 data-i18n="heading">A clearer view of your website.</h1><p data-i18n="intro">Find broken links and technical SEO issues. Get the evidence and a practical next step.</p></div><span class="preview-tag" data-i18n="preview">Preview</span></section>
+  <section id="report"><div class="report-heading"><div><h2 id="report-target"></h2><p id="report-meta"></p></div></div><div id="summary" class="summary"></div><section id="findings"><div class="section-heading"><h2 data-i18n="findings">Findings</h2><span id="finding-count"></span></div><div class="filters"><label><span class="sr-only" data-i18n="search">Search findings</span><input id="search" type="search" data-placeholder="search" placeholder="Search findings"></label><label><span class="sr-only" data-i18n="severity">Severity</span><select id="severity"><option value="all" data-i18n="all">All severities</option><option value="error" data-i18n="error">Errors</option><option value="warning" data-i18n="warning">Warnings</option><option value="info" data-i18n="info">Information</option></select></label></div><div id="finding-list"></div><p id="no-results" hidden data-i18n="noResults">No findings match these filters.</p></section><section class="coverage"><h2 data-i18n="coverage">Coverage</h2><div id="skipped-list"></div></section></section>
+  <section id="scope" class="scope"><h2 data-i18n="scope">Scope & limits</h2><pre id="report-scope"></pre><ul id="limitations"></ul></section>
+  <section class="developer-card"><div class="developer-brand"><img src="data:image/png;base64,${logo.toString('base64')}" alt="Crelyn Studio" width="160"><p data-i18n="developer">Developed by Crelyn Studio</p></div><div class="developer-content"><h2 data-i18n="about">About the developer</h2><p data-i18n="developerText">This open-source tool is developed by Crelyn Studio.</p><nav aria-label="Crelyn Studio"><a href="https://crelynstudio.com">Website</a><a href="mailto:info@crelynstudio.com" data-i18n="contact">Contact</a><a href="https://github.com/crelynstudio">GitHub</a><a href="https://www.behance.net/crelynstudio">Behance</a><a href="https://www.instagram.com/crelynstudio/">Instagram</a><a href="https://x.com/crelynstudio">X</a><a href="https://www.threads.com/@crelynstudio">Threads</a></nav></div></section>
+  <footer class="page-footer"><span>SiteMercek</span><span data-i18n="footer">Evidence over scores. Local by design.</span></footer></main></div><noscript>This interface requires JavaScript. Use the CLI terminal or JSON report without JavaScript.</noscript><script>${script}</script></body></html>`;
+}

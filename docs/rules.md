@@ -50,9 +50,9 @@ Bildirilmiş canonical, kimlik bilgisi içermeyen HTTP(S) adresine çözülemez 
 Birden fazla farklı canonical hedefi. Tek tutarlı hedef kullanın. Aynı hedefi tekrarlamak bu kuralı tetiklemez; otomatik ceza iddiası yoktur.
 
 ## IDX_001
-**info, certain.** `noindex` or `none` found in robots/CrelynSEOAuditor meta or X-Robots-Tag. Confirm intent. Agent-scoped X-Robots-Tag values are not fully modeled; treat them as observations, not proof of what every crawler will do.
+**info, certain.** `noindex` or `none` found in robots/SiteMercek meta or X-Robots-Tag. Confirm intent. Agent-scoped X-Robots-Tag values are not fully modeled; treat them as observations, not proof of what every crawler will do.
 
-Robots/CrelynSEOAuditor meta veya X-Robots-Tag içinde noindex/none. Amacınızı doğrulayın. X-Robots-Tag içindeki tüm bot kapsamları modellenmez; her botun davranışı için kanıt değildir.
+Robots/SiteMercek meta veya X-Robots-Tag içinde noindex/none. Amacınızı doğrulayın. X-Robots-Tag içindeki tüm bot kapsamları modellenmez; her botun davranışı için kanıt değildir.
 
 ## IDX_002
 **info for 404; warning otherwise.** Missing sitemap differs from unreadable/invalid XML. Check status/XML. Missing sitemap alone is not critical. Unreadable discovery can make coverage partial.
@@ -73,3 +73,21 @@ Kaynak/robots güvenli biçimde alınamadı. Kanıt ham yığın izi yerine kara
 **error, certain.** Unexpected analyzer error. Report a minimal local reproduction. Never interpret this as a passed check; exit 1.
 
 Beklenmeyen analiz hatası. Küçük yerel tekrar örneği bildirin. Geçen kontrol sayılmaz; çıkış 1 olur.
+
+## SEO_007
+
+**info, heuristic.** Static heading levels jump by more than one between adjacent headings (for example H1 → H3). Review the outline in context. This does not prove an accessibility failure or describe JavaScript-rendered content.
+
+Statik başlık sırası birden fazla seviye atlar (H1 → H3). Bağlama göre inceleyin; erişilebilirlik hatası veya JavaScript sonrası yapı için kesin kanıt değildir.
+
+## SEO_008
+
+**info, heuristic.** Identical trimmed nonempty descriptions across distinct successful final HTML URLs. Evidence lists affected pages. Shared descriptions can be intentional; no ranking penalty is claimed.
+
+Farklı başarılı son HTML adreslerinde aynı boş olmayan açıklama. Bilinçli olabilir; sıralama cezası iddiası yoktur.
+
+## RESOURCE_001
+
+**error, certain.** An opted-in, same-origin image/script/stylesheet returned HTTP 4xx/5xx or a recorded request error. Evidence includes source, target and status/error. External origins and robots/budget exclusions are not labeled broken. It does not prove the rendered page's visual behavior.
+
+İsteğe bağlı aynı kökenli görsel/betik/stil kontrolünde HTTP hatası veya istek hatası. Harici/robots/bütçe dışı kaynak bozuk diye işaretlenmez. İşlenmiş sayfanın görünümünü kanıtlamaz.

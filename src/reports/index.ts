@@ -4,11 +4,18 @@ import { randomUUID } from 'node:crypto';
 import type { ScanReport } from '../core/types.js';
 import { PRODUCT } from '../core/types.js';
 import { messages } from '../i18n/index.js';
-import { renderHtml as html } from '../web/page.js';
+import { redact } from './privacy.js';
+import { renderHtml as html } from './html.js';
 export { html };
 export const escapeHtml = (value: unknown): string => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]!);
 const plain = (value: string): string => value.replace(/[\u0000-\u001f\u007f-\u009f]/g, ' ');
+export function colorize(text: string): string {
+  if (!process.stdout.isTTY || process.env.NO_COLOR !== undefined || process.env.CI || process.env.TERM === 'dumb') return text;
+  return text.replace(/^(NEW|RESOLVED|UNCHANGED|UNVERIFIED|\[(?:Error|Warning|Information|Hata|Uyarı|Bilgi)\])/gm,
+    label => `\u001b[${label === 'RESOLVED' ? 32 : label === 'NEW' || /Error|Hata/.test(label) ? 31 : 33}m${label}\u001b[0m`);
+}
 export function terminal(report: ScanReport): string {
+  report = redact(report);
   const m = messages(report.config.lang), s = report.summary;
   return [
     `${PRODUCT} ${report.version} | ${m.summary}`, plain(report.target),
@@ -26,7 +33,8 @@ export function exitCode(report: ScanReport): number {
 }
 export async function writeReports(report: ScanReport): Promise<string[]> {
   const written: string[] = [], formats = report.config.formats;
-  if (formats.includes('terminal')) process.stdout.write(terminal(report) + '\n');
+  report = redact(report);
+  if (formats.includes('terminal')) process.stdout.write(colorize(terminal(report)) + '\n');
   if (formats.length === 1 && formats[0] === 'json' && !report.config.output) {
     process.stdout.write(JSON.stringify(report, null, 2) + '\n'); return written;
   }
@@ -34,7 +42,7 @@ export async function writeReports(report: ScanReport): Promise<string[]> {
   if (!fileFormats.length) return written;
   const dir = resolve(report.config.output ?? './reports');
   await mkdir(dir, { recursive: true });
-  const stem = `website-seo-audit-${report.startedAt.replace(/[:.]/g, '-')}-${randomUUID().slice(0, 8)}`;
+  const stem = `sitemercek-${report.startedAt.replace(/[:.]/g, '-')}-${randomUUID().slice(0, 8)}`;
   for (const format of fileFormats) {
     const path = join(dir, `${stem}.${format}`);
     await writeFile(path, format === 'json' ? JSON.stringify(report, null, 2) + '\n' : await html(report), { encoding: 'utf8', flag: 'wx' });

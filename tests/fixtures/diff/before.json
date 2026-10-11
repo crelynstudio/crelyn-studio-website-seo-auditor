@@ -1,0 +1,92 @@
+{
+  "schemaVersion": "2",
+  "rulesVersion": "2",
+  "version": "0.3.0-preview.1",
+  "target": "https://fixture.test/",
+  "startedAt": "2026-10-11T12:00:00.000Z",
+  "finishedAt": "2026-10-11T12:00:01.000Z",
+  "status": "complete",
+  "scope": {
+    "origin": "https://fixture.test",
+    "startUrl": "https://fixture.test/",
+    "maxPages": 100,
+    "maxDepth": 4,
+    "checkResources": false,
+    "maxResources": 100,
+    "allowPrivateNetwork": false
+  },
+  "config": {
+    "url": "https://fixture.test/",
+    "lang": "en",
+    "maxPages": 100,
+    "maxDepth": 4,
+    "concurrency": 2,
+    "timeout": 10000,
+    "formats": [
+      "json"
+    ],
+    "failOn": "none",
+    "allowPrivateNetwork": false,
+    "checkResources": false,
+    "maxResources": 100
+  },
+  "resources": [],
+  "pages": [
+    {
+      "url": "https://fixture.test/",
+      "finalUrl": "https://fixture.test/",
+      "depth": 0,
+      "status": 200,
+      "redirects": [],
+      "headers": {
+        "content-type": "text/html"
+      },
+      "html": true,
+      "links": [],
+      "title": "",
+      "h1": 1
+    }
+  ],
+  "findings": [
+    {
+      "ruleId": "SEO_001",
+      "severity": "warning",
+      "result": "failed",
+      "confidence": "heuristic",
+      "url": "https://fixture.test/",
+      "observed": "",
+      "expected": "Static HTML metadata",
+      "messageKey": "SEO_001",
+      "params": {},
+      "message": "Page title is empty or missing.",
+      "recommendation": "Review static HTML metadata.",
+      "docsUrl": "https://github.com/crelynstudio/crelyn-studio-website-seo-auditor/blob/main/docs/rules.md#seo_001"
+    },
+    {
+      "ruleId": "SEO_003",
+      "severity": "info",
+      "result": "failed",
+      "confidence": "heuristic",
+      "url": "https://fixture.test/",
+      "observed": "",
+      "expected": "Static HTML metadata",
+      "messageKey": "SEO_003",
+      "params": {},
+      "message": "Meta description is empty or missing.",
+      "recommendation": "Review static HTML metadata.",
+      "docsUrl": "https://github.com/crelynstudio/crelyn-studio-website-seo-auditor/blob/main/docs/rules.md#seo_003"
+    }
+  ],
+  "skippedChecks": [],
+  "limitations": [
+    "Synthetic snapshot fixture; no live requests."
+  ],
+  "summary": {
+    "discovered": 1,
+    "crawled": 1,
+    "skipped": 0,
+    "errors": 0,
+    "warnings": 1,
+    "info": 1
+  }
+}

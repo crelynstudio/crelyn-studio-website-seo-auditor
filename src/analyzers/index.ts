@@ -1,9 +1,10 @@
 import type { CrawlPage, Finding, Lang, Severity } from '../core/types.js';
 import { catalog } from '../i18n/index.js';
 import { normalizeUrl } from '../network/url.js';
-export type RuleId = 'HTTP_001' | 'HTTP_002' | 'LINK_001' | 'SEO_001' | 'SEO_002' | 'SEO_003' | 'SEO_004' | 'SEO_005' | 'SEO_006' | 'IDX_001' | 'IDX_002' | 'HEALTH_001' | 'NETWORK_001' | 'ANALYZER_001';
+export type RuleId = 'HTTP_001' | 'HTTP_002' | 'LINK_001' | 'SEO_001' | 'SEO_002' | 'SEO_003' | 'SEO_004' | 'SEO_005' | 'SEO_006' | 'IDX_001' | 'IDX_002' | 'HEALTH_001' | 'NETWORK_001' | 'ANALYZER_001' | 'SEO_007' | 'SEO_008' | 'RESOURCE_001';
 const expectations: Record<Lang, Record<RuleId, string>> = {
   en: {
+    SEO_007: 'Sequential heading levels where appropriate', SEO_008: 'Page-specific descriptions where appropriate', RESOURCE_001: 'Reachable same-origin asset',
     HTTP_001: 'HTTP status below 400', HTTP_002: 'At most one safe redirect', LINK_001: 'Reachable successful target',
     SEO_001: 'Nonempty title', SEO_002: 'Page-specific titles', SEO_003: 'Useful meta description where appropriate',
     SEO_004: 'Descriptive main heading where appropriate', SEO_005: 'Resolvable HTTP(S) canonical URL', SEO_006: 'One consistent canonical target',
@@ -11,6 +12,7 @@ const expectations: Record<Lang, Record<RuleId, string>> = {
     NETWORK_001: 'Safe reachable resource', ANALYZER_001: 'Analyzer completes normally'
   },
   tr: {
+    SEO_007: 'Uygun olduğunda sıralı başlık seviyeleri', SEO_008: 'Uygun olduğunda sayfaya özgü açıklamalar', RESOURCE_001: 'Erişilebilir aynı kökenli kaynak',
     HTTP_001: '400 altı HTTP durum kodu', HTTP_002: 'En fazla bir güvenli yönlendirme', LINK_001: 'Erişilebilir başarılı hedef',
     SEO_001: 'Boş olmayan başlık', SEO_002: 'Sayfaya özgü başlıklar', SEO_003: 'Uygun olduğunda yararlı meta açıklaması',
     SEO_004: 'Uygun olduğunda açıklayıcı ana başlık', SEO_005: 'Çözülebilir HTTP(S) canonical adresi', SEO_006: 'Tek tutarlı canonical hedefi',
@@ -20,8 +22,8 @@ const expectations: Record<Lang, Record<RuleId, string>> = {
 };
 export function finding(id: RuleId, severity: Severity, url: string, observed: unknown, lang: Lang): Finding {
   const [message, recommendation] = catalog[lang][id];
-  return { ruleId: id, severity, result: 'failed', confidence: ['SEO_002', 'SEO_003', 'SEO_004', 'HEALTH_001'].includes(id) ? 'heuristic' : 'certain', url,
-    observed, expected: expectations[lang][id], messageKey: id, params: {}, message, recommendation, docsUrl: `docs/rules.md#${id.toLowerCase()}` };
+  return { ruleId: id, severity, result: 'failed', confidence: ['SEO_002', 'SEO_003', 'SEO_004', 'HEALTH_001', 'SEO_007', 'SEO_008'].includes(id) ? 'heuristic' : 'certain', url,
+    observed, expected: expectations[lang][id], messageKey: id, params: {}, message, recommendation, docsUrl: `https://github.com/crelynstudio/crelyn-studio-website-seo-auditor/blob/main/docs/rules.md#${id.toLowerCase()}` };
 }
 export function analyze(pages: CrawlPage[], lang: Lang): Finding[] {
   const output: Finding[] = [];
@@ -35,6 +37,7 @@ export function analyze(pages: CrawlPage[], lang: Lang): Finding[] {
       if (!page.title) add('SEO_001', 'warning', page, page.title ?? '');
       if (!page.description) add('SEO_003', 'info', page, page.description ?? '');
       if (!page.h1) add('SEO_004', 'info', page, page.h1 ?? 0);
+      if (page.headings?.some((level, index, levels) => index > 0 && level > levels[index - 1]! + 1)) add('SEO_007', 'info', page, page.headings);
       const canonical = new Set<string>();
       for (const raw of page.canonicals ?? []) {
         try {
@@ -57,6 +60,13 @@ export function analyze(pages: CrawlPage[], lang: Lang): Finding[] {
     titles.set(page.title!, group);
   }
   for (const group of titles.values()) if (group.length > 1) for (const page of group) add('SEO_002', 'warning', page, { title: page.title, urls: group.map(p => p.finalUrl) });
+  const descriptions = new Map<string, CrawlPage[]>();
+  for (const page of pages.filter(p => p.html && !p.error && (p.status ?? 500) < 400 && p.description)) {
+    const group = descriptions.get(page.description!) ?? [];
+    if (!group.some(p => p.finalUrl === page.finalUrl)) group.push(page);
+    descriptions.set(page.description!, group);
+  }
+  for (const group of descriptions.values()) if (group.length > 1) for (const page of group) add('SEO_008', 'info', page, { description: page.description, urls: group.map(p => p.finalUrl) });
   const targets = new Map(pages.map(p => [p.url, p]));
   for (const page of pages) for (const link of page.links.filter(l => l.kind === 'internal' && l.targetUrl)) {
     const target = targets.get(link.targetUrl!);

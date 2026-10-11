@@ -84,7 +84,7 @@ export class SafeHttp {
     else this.active++;
     try {
       this.signal.throwIfAborted();
-      if (++this.requests > this.config.maxPages * 12 + 32) throw new NetworkError('REQUEST_BUDGET');
+      if (++this.requests > (this.config.maxPages + (this.config.checkResources ? this.config.maxResources : 0)) * 12 + 32) throw new NetworkError('REQUEST_BUDGET');
       return await this.request(url);
     } finally {
       const next = this.waiters.shift();
@@ -126,10 +126,10 @@ export class SafeHttp {
       const request = (url.protocol === 'https:' ? https : http).get(url, {
         agent: false, signal, family: pinned.family,
         lookup: (_host, _options, callback) => callback(null, pinned.address, pinned.family),
-        headers: { 'User-Agent': 'CrelynSEOAuditor/0.2 (+https://github.com/crelynstudio/crelyn-studio-website-seo-auditor)', 'Accept-Encoding': 'gzip, deflate, br' }
+        headers: { 'User-Agent': 'SiteMercek/0.3 (+https://github.com/crelynstudio/crelyn-studio-website-seo-auditor)', 'Accept-Encoding': 'gzip, deflate, br' }
       }, response => {
         const headers: Record<string, string> = {};
-        for (const [key, value] of Object.entries(response.headers)) if (value !== undefined && !['set-cookie', 'www-authenticate'].includes(key)) headers[key] = Array.isArray(value) ? value.join(', ') : value;
+        for (const [key, value] of Object.entries(response.headers)) if (value !== undefined && ['content-type', 'content-encoding', 'location', 'retry-after', 'content-security-policy', 'strict-transport-security', 'x-content-type-options', 'x-robots-tag', 'x-frame-options', 'referrer-policy'].includes(key)) headers[key] = Array.isArray(value) ? value.join(', ') : value;
         const status = response.statusCode ?? 0;
         if ([301, 302, 303, 307, 308].includes(status)) {
           response.destroy();

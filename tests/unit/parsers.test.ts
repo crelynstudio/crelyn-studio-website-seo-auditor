@@ -10,13 +10,13 @@ import type { CrawlPage, ScanReport } from '../../src/core/types.js';
 import { parseConfig } from '../../src/config/index.js';
 
 test('robots specific groups merge, allow wins tie, longest path and wildcards', () => {
-  const r = parseRobots('User-agent: *\nDisallow: /\nUser-agent: CrelynSEOAuditor\nDisallow: /secret\nAllow: /secret/open\nDisallow: /*.pdf$\nUser-agent: crelynseoauditor\nAllow: /tie\nDisallow: /tie');
+  const r = parseRobots('User-agent: *\nDisallow: /\nUser-agent: SiteMercek\nDisallow: /secret\nAllow: /secret/open\nDisallow: /*.pdf$\nUser-agent: sitemercek\nAllow: /tie\nDisallow: /tie');
   for (const path of ['/secret', '/secret/deep', '/a.pdf']) assert.equal(r.allowed('https://x.test' + path), false);
   for (const path of ['/', '/secret/open', '/tie', '/a.pdf?q=1']) assert.equal(r.allowed('https://x.test' + path), true);
   assert.equal(parseRobots('User-agent: *\nDisallow: /').allowed('https://x.test/'), false);
 });
 test('robots UTF-8 and percent encoding, case sensitive paths, empty directives', () => {
-  const r = parseRobots('User-agent: CrelynSEOAuditor\nDisallow: /café\nDisallow: /%62\nDisallow: /a%2fb\nDisallow: /Case\nDisallow:\nAllow:');
+  const r = parseRobots('User-agent: SiteMercek\nDisallow: /café\nDisallow: /%62\nDisallow: /a%2fb\nDisallow: /Case\nDisallow:\nAllow:');
   for (const path of ['/caf%C3%A9', '/b', '/a%2Fb', '/Case']) assert.equal(r.allowed('https://x.test' + path), false, path);
   for (const path of ['/a/b', '/case', '/']) assert.equal(r.allowed('https://x.test' + path), true, path);
 });

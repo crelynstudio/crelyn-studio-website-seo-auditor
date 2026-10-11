@@ -1,11 +1,13 @@
 import type { CrawlPage, ScanConfig, ScanReport, SkippedCheck } from '../core/types.js';
-import { VERSION } from '../core/types.js';
+import { VERSION, RULES_VERSION } from '../core/types.js';
 import { SafeHttp, NetworkError } from '../network/http.js';
 import { normalizeUrl, type Resolver } from '../network/url.js';
 import { parseRobots } from '../parsers/robots.js';
 import { parseSitemap } from '../parsers/sitemap.js';
 import { parseHtml } from '../parsers/html.js';
 import { analyze, finding } from '../analyzers/index.js';
+import { checkResources } from './resources.js';
+import { redact } from '../reports/privacy.js';
 import { limitations } from '../i18n/index.js';
 
 export async function scan(config: ScanConfig, signal = new AbortController().signal,
@@ -81,6 +83,7 @@ export async function scan(config: ScanConfig, signal = new AbortController().si
             page.title = prior.title; page.description = prior.description; page.h1 = prior.h1;
             page.canonicals = prior.canonicals; page.noindex = prior.noindex;
             page.baseUrl = prior.baseUrl;
+            page.headings = prior.headings;
             skip(url, 'DUPLICATE_FINAL', ['link-discovery']);
           } else skip(url, page.html ? 'HTTP_ERROR' : 'NON_HTML', ['seo']);
         } catch (error) {
@@ -108,12 +111,16 @@ export async function scan(config: ScanConfig, signal = new AbortController().si
     skip(config.url, code);
   }
   if (!pages.length) partial = true;
+  const assets = config.checkResources ? await checkResources(pages, config, http, signal) : { results: [], findings: [], skipped: [], partial: false };
+  partial ||= assets.partial;
+  extra.push(...assets.findings); skippedChecks.push(...assets.skipped);
   const findings = [...extra, ...analyze(pages, config.lang)].sort((a, b) => a.ruleId.localeCompare(b.ruleId, 'en') || a.url.localeCompare(b.url, 'en') || (a.targetUrl ?? '').localeCompare(b.targetUrl ?? '', 'en'));
   pages.sort((a, b) => a.url.localeCompare(b.url, 'en'));
   skippedChecks.sort((a, b) => a.url.localeCompare(b.url, 'en') || a.reason.localeCompare(b.reason, 'en'));
-  return { schemaVersion: '1', version: VERSION, target: config.url, startedAt, finishedAt: new Date().toISOString(),
+  return redact<ScanReport>({ schemaVersion: '2', rulesVersion: RULES_VERSION,
+    scope: { origin, startUrl: config.url, maxPages: config.maxPages, maxDepth: config.maxDepth, checkResources: config.checkResources, maxResources: config.maxResources, allowPrivateNetwork: config.allowPrivateNetwork }, resources: assets.results, version: VERSION, target: config.url, startedAt, finishedAt: new Date().toISOString(),
     status: signal.aborted ? 'aborted' : partial ? 'truncated' : 'complete', config,
     summary: { discovered: seen.size, crawled: pages.length, skipped: skippedChecks.length,
       errors: findings.filter(f => f.severity === 'error').length, warnings: findings.filter(f => f.severity === 'warning').length, info: findings.filter(f => f.severity === 'info').length },
-    pages, findings, skippedChecks, limitations: limitations(config.lang) };
+    pages, findings, skippedChecks, limitations: limitations(config.lang) });
 }

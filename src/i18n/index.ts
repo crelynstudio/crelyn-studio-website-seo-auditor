@@ -1,6 +1,9 @@
 import type { Lang } from '../core/types.js';
 export const catalog = {
   en: {
+    SEO_007: ['Heading levels skip a level.', 'Review the static HTML outline; rendered headings may differ.'],
+    SEO_008: ['Multiple pages share a meta description.', 'Consider page-specific summaries where useful; no ranking guarantee.'],
+    RESOURCE_001: ['An internal asset could not be loaded.', 'Restore the image, script or stylesheet, or update its URL.'],
     HTTP_001: ['HTTP request failed.', 'Restore the resource or update links to a working URL.'],
     HTTP_002: ['Redirect chain needs attention.', 'Link directly to the final URL and remove redirect loops.'],
     LINK_001: ['An internal link leads to a failed resource.', 'Fix the target resource or update the source link.'],
@@ -21,9 +24,12 @@ export const catalog = {
     developer: 'Developed by Crelyn Studio', about: 'About the developer',
     running: 'Scanning', discovered: 'Discovered', duration: 'Duration', all: 'All severities',
     invalid: 'Invalid command or URL. Run --help for options.', fatal: 'The scan could not finish. Check the error code and target.',
-    help: 'Usage: site-audit [audit] <url> [options]\nAudit website health and technical SEO. Static HTTP only.\n\n--lang en_US|tr                 Report language (default en)\n--max-pages 1..1000          Request/page budget (default 100)\n--max-depth 0..10            Link depth (default 4)\n--concurrency 1..2           Maximum simultaneous requests (default 2)\n--timeout 100..60000         Per-request deadline in milliseconds (default 10000)\n--format terminal,html,json  Comma-separated outputs (default terminal)\n--output <directory>        Save HTML/JSON here (default ./reports); never overwrite\n--fail-on error|warning|none CI threshold (default none); partial scans exit 1\n--allow-private-network     Explicitly permit local/private targets\nsite-audit web [--port 4187]\n--help, --version, --about\n\nJSON alone without --output writes JSON to stdout. Progress uses stderr.\nExit: 0 complete, 1 invalid/partial/runtime failure, 2 complete with threshold exceeded.'
+    help: 'Usage: sitemercek [audit] <url> [options]\nAudit website health and technical SEO. Static HTTP only.\n\n--lang en_US|tr                 Report language (default en)\n--max-pages 1..1000          Page candidate budget (default 100)\n--max-depth 0..10            Link depth (default 4)\n--concurrency 1..2           Maximum simultaneous requests (default 2)\n--timeout 100..60000         Per-request deadline in milliseconds (default 10000)\n--format terminal,html,json  Comma-separated outputs (default terminal)\n--output <directory>        Save HTML/JSON here (default ./reports); never overwrite\n--fail-on error|warning|none CI threshold (default none); partial scans exit 1\n--allow-private-network     Explicitly permit local/private targets\nsitemercek diff before.json after.json [--format json] [--fail-on-new error|warning|none]\n--check-resources           Check same-origin images, scripts and stylesheets\n--max-resources 1..1000     Separate asset budget (default 100)\n--help, --version, --about\n\nJSON alone without --output writes JSON to stdout. Progress uses stderr.\nExit: 0 complete, 1 invalid/partial/runtime failure, 2 complete with threshold exceeded.'
   },
   tr: {
+    SEO_007: ['Başlık seviyelerinde atlama var.', 'Statik HTML yapısını inceleyin; işlenmiş başlıklar farklı olabilir.'],
+    SEO_008: ['Birden fazla sayfa aynı meta açıklamasını kullanıyor.', 'Uygunsa sayfaya özgü özetler kullanın; sıralama garantisi yoktur.'],
+    RESOURCE_001: ['Dahili kaynak yüklenemedi.', 'Görseli, betiği veya stil dosyasını düzeltin ya da adresini güncelleyin.'],
     HTTP_001: ['HTTP isteği başarısız.', 'Kaynağı düzeltin veya bağlantıyı çalışan bir adrese yöneltin.'],
     HTTP_002: ['Yönlendirme zinciri incelenmeli.', 'Son adrese doğrudan bağlantı verin ve yönlendirme döngülerini kaldırın.'],
     LINK_001: ['Dahili bağlantı başarısız bir kaynağa gidiyor.', 'Hedef kaynağı düzeltin veya kaynak sayfadaki bağlantıyı güncelleyin.'],
@@ -44,16 +50,16 @@ export const catalog = {
     developer: 'Crelyn Studio tarafından geliştirildi', about: 'Geliştirici hakkında',
     running: 'Taranıyor', discovered: 'Keşfedilen', duration: 'Süre', all: 'Tüm seviyeler',
     invalid: 'Komut veya adres geçersiz. Seçenekler için --help kullanın.', fatal: 'Tarama bitirilemedi. Hata kodunu ve hedefi kontrol edin.',
-    help: 'Kullanım: site-audit [audit] <adres> [seçenekler]\nSite sağlığı ve teknik SEO denetimi. Yalnızca statik HTTP.\n\n--lang en_US|tr                 Rapor dili (varsayılan en)\n--max-pages 1..1000          İstek/sayfa bütçesi (varsayılan 100)\n--max-depth 0..10            Bağlantı derinliği (varsayılan 4)\n--concurrency 1..2           Eşzamanlı istek sınırı (varsayılan 2)\n--timeout 100..60000         İstek süresi, milisaniye (varsayılan 10000)\n--format terminal,html,json  Virgülle ayrılan çıktılar (varsayılan terminal)\n--output <klasör>           HTML/JSON kayıt yeri (varsayılan ./reports); üzerine yazılmaz\n--fail-on error|warning|none Kalite eşiği (varsayılan none); kısmi taramada kod 1\n--allow-private-network     Yerel/özel ağ hedeflerine açıkça izin ver\nsite-audit web [--port 4187]\n--help, --version, --about\n\nTek JSON biçimi, --output yoksa standart çıktıya yazılır. İlerleme stderr kullanır.\nÇıkış: 0 tamamlandı, 1 geçersiz/kısmi/çalıştırma hatası, 2 tamamlandı ve eşik aşıldı.'
+    help: 'Kullanım: sitemercek [audit] <adres> [seçenekler]\nSite sağlığı ve teknik SEO denetimi. Yalnızca statik HTTP.\n\n--lang en_US|tr                 Rapor dili (varsayılan en)\n--max-pages 1..1000          Sayfa bütçesi (varsayılan 100)\n--max-depth 0..10            Bağlantı derinliği (varsayılan 4)\n--concurrency 1..2           Eşzamanlı istek sınırı (varsayılan 2)\n--timeout 100..60000         İstek süresi, milisaniye (varsayılan 10000)\n--format terminal,html,json  Virgülle ayrılan çıktılar (varsayılan terminal)\n--output <klasör>           HTML/JSON kayıt yeri (varsayılan ./reports); üzerine yazılmaz\n--fail-on error|warning|none Kalite eşiği (varsayılan none); kısmi taramada kod 1\n--allow-private-network     Yerel/özel ağ hedeflerine açıkça izin ver\nsitemercek diff before.json after.json [--format json] [--fail-on-new error|warning|none]\n--check-resources           Aynı kökenli görsel/betik/stil kontrolü\n--max-resources 1..1000     Ayrı kaynak bütçesi (varsayılan 100)\n--help, --version, --about\n\nTek JSON biçimi, --output yoksa standart çıktıya yazılır. İlerleme stderr kullanır.\nÇıkış: 0 tamamlandı, 1 geçersiz/kısmi/çalıştırma hatası, 2 tamamlandı ve eşik aşıldı.'
   }
 } as const;
 export function messages(lang: Lang) { return catalog[lang]; }
 export const limitations = (lang: Lang): string[] => lang === 'tr' ? [
-  'Yalnızca statik HTTP; JavaScript sonrası DOM, oturum ve erişilebilirlik denetlenmez.',
+  'Yalnızca statik HTTP; JavaScript sonrası DOM, oturum ve erişilebilirlik denetlenmez. Burada eksik etiketler JavaScript sonrası bulunabilir.',
   'Harici kökenler, formlar ve kimlik doğrulama izlenmez. Genel sağlık puanı verilmez.',
   'Robots tarafından engellenen adresler ve bütçe sınırları raporda belirtilir. Bulgular taranan kapsamla sınırlıdır.'
 ] : [
-  'Static HTTP only; no JavaScript DOM, sessions or accessibility audit.',
+  'Static HTTP only; no JavaScript DOM, sessions or accessibility audit. Tags missing here may exist after JavaScript rendering.',
   'External origins, forms and authentication are not followed. No overall health score.',
   'Robots exclusions and budget limits are recorded. Findings apply only to the scanned scope.'
 ];

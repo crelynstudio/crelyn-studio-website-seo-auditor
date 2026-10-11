@@ -1,39 +1,42 @@
 # Implementation and verification status
 
-**2026-10-11 · v0.2.0-preview.1 · Development preview**
+**2026-10-11 · v0.3.0-preview.1 · Development preview**
 
-The user authorized UI improvements, English/Turkish selection, English README, renaming, and public GitHub source publication. User hands-on acceptance of the preview remains a separate check.
+The user explicitly requested the existing repository to become CLI-only, with safe assets, privacy handling, snapshot/diff and source push. No npm publication or GitHub Release is authorized in this update.
 
 ## Implemented
 
-- Local browser workspace with URL form, bounded page budget, explicit private-network exception, run/cancel, coverage, severity/search filters, evidence, and JSON/standalone HTML export.
-- English (US)/Turkish interface, persisted preference, translated findings and developer card with real Crelyn Studio logo/contact/social links.
-- CLI with site-audit command and sitemercek compatibility alias; en_US input accepted while schema v1 retains en/tr.
-- Safe bounded same-origin crawler and technical SEO/link/passive health checks.
-- Exact loopback Host/Origin and per-session token validation, bounded JSON request body, one active audit, and disconnect cancellation.
-- English README, actual screenshots/fixture reports, MIT code license and separate brand-rights notice.
+- SiteMercek primary identity and sitemercek CLI; transitional site-audit alias.
+- Removed HTTP application/API, web command, browser scan/cancel form and related web-only integration tests. Their static report security/behavior is covered by CLI/report tests.
+- Preserved protected crawler, DNS pinning/private IP policy, robots/sitemap, redirects, TLS, rate/concurrency/time/size/retry/abort controls.
+- Optional images/scripts/stylesheets with a distinct candidate budget and shared SafeHttp cache.
+- Heading-level and duplicate-description observations.
+- Response-header allowlist, sensitive-value masking, escaped JSON/textContent and hashed CSP.
+- Schema v2, rule version and explicit scope; NEW/RESOLVED/UNCHANGED/UNVERIFIED diff, JSON output and CI thresholds.
+- Offline EN/TR report viewer with search, filters, evidence, documentation and authentic developer attribution.
+- English README, Turkish guide, current examples/screenshots, package install smoke test and Node 22/24 × Windows/Linux/macOS CI matrix.
 
 ## Verification
 
-Local environment: Windows, Node 24.19.0, npm 11.17.0, system Chrome controlled by Playwright. Local fixture and injected resolver tests do not crawl third-party sites.
+Local environment: Windows, Node 24.19.0, npm 11.17.0 and headless system Chrome. Tests use local HTTP fixtures and injected DNS; package installs use the npm registry.
 
-The checks cover type/lint/build, crawler and CLI behavior, schema validation, private IP/DNS/redirect/rate/byte/timeout budgets, robots/sitemap parsing, and report escaping. Web integration checks cover Host/Origin/token rejection, input/body bounds, busy requests, blocked private targets, and successful local audits.
+Typecheck, ESLint, all unit/integration tests and production build are checked before commit. Package verification checks npm file contents, shebang, clean production installation, primary/legacy binaries, diff and local audit HTML/JSON. Browser verification covers offline opening, EN/TR switching and persistence, severity/search/empty state, keyboard evidence, logo, desktop/mobile overflow, and no external requests/browser errors.
 
-Local results: 21 tests passed, none failed or skipped; typecheck, lint, build, and JavaScript syntax check passed. A clean source export installed with npm ci and passed the same 21 tests/typecheck/lint. An npm tarball was unpacked into a separate directory, installed with production dependencies only, and generated HTML/JSON reports successfully. npm audit reported zero vulnerabilities at check time. The UI detector reported no findings. These results do not replace an independent security review.
+Local and clean source checks: 30 tests passed, zero failed/skipped; typecheck, lint and build passed. The 40-file package passed clean production installation and local audit/diff smoke tests. npm audit reported zero vulnerabilities at check time. Offline Chrome checks passed with zero external requests and browser errors.
 
-Browser verification covers English/Turkish switching and persistence, three-page/six-finding scan, severity/search/empty results, keyboard evidence disclosure, logo/social links, JSON/HTML download, token-free saved HTML, offline filtering/language change, desktop/mobile layout without horizontal overflow, and zero unexpected external requests or browser errors. Screenshots show synthetic local fixture data.
+Actual local fixture examples contain three checked pages, six findings (2 errors/2 warnings/2 information), complete scope and schema v2. Screenshots are generated from that report. Source contains no HTTP listener; the only listener is the explicitly started example/test fixture. The removed web command exits 1.
 
-Run the documented checks in README to reproduce. GitHub Actions provides the Node 22/24 matrix on Windows/Linux/macOS; inspect the actual workflow result on the repository rather than assuming configuration means success.
+The npm registry returned E404 for @crelynstudio/sitemercek on 2026-10-11. This is not an ownership/availability guarantee. No package was published. Inspect the actual GitHub Actions run for platform results; workflow configuration alone is not a successful run.
 
-## Limits and remaining manual checks
+## Limits
 
-- This is a preview; the user has not yet performed hands-on acceptance.
-- No independent penetration test, live hostile-network test, real third-party target crawl, or physical Windows Ctrl+C test.
-- Light theme only; full accessibility audits and all assistive technologies are not verified.
-- No JavaScript target rendering, legacy charset conversion, authentication/session crawling, external origins, or overall SEO/security score.
-- Reports may contain sensitive target data. No npm publication, stable release, or hosted deployment.
-- Local ignored node_modules/dist remain for easy preview. Ignored .verification retains temporary copies after an earlier cleanup was blocked by automatic approval review; it is excluded from GitHub.
+- Preview; no independent security audit or user hands-on acceptance of this refactor.
+- Static HTML only; no JS rendering, sessions, accessibility audit or external-origin crawling.
+- Privacy masking cannot detect every secret in arbitrary text, paths or unknown formats. Review before sharing.
+- Diff is conservative when scope, redirect destinations or checked URL sets differ. Incomplete comparisons exit 1; masked URL identities and legacy snapshots require a fresh scan.
+- No physical Ctrl+C/assistive-technology testing or hostile real-world target crawling.
+- Local ignored node_modules/dist and earlier .verification copies are excluded from GitHub; earlier temporary-copy cleanup was blocked by automatic review.
 
-## Try it
+## Reproduce
 
-Run npm run web, open http://127.0.0.1:4187, start node examples/demo-server.mjs in a second terminal, and audit http://127.0.0.1:4765 with the trusted local network checkbox enabled. Expect 3 pages and 2 errors/2 warnings/2 information findings. Switch languages, filter findings, and open an exported HTML offline.
+Use the exact commands in README.md. Run npm run test:package for clean local package installation; use node examples/demo-server.mjs only when explicitly testing a local fixture. Open generated HTML directly as a file.

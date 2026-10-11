@@ -1,14 +1,12 @@
 # Roadmap / Yol haritası
 
-## Future candidates / Gelecek adayları
-- Snapshot/diff and explicit rule suppression / Kayıt-fark karşılaştırması ve açık kural susturma.
-- CI quality-gate ergonomics / CI kalite kapısı kullanımını kolaylaştırma.
-- More RFC test vectors and encoding support / Daha fazla RFC test girdisi ve kodlama desteği.
+Implemented in 0.3.0-preview.1: CLI-only operation, optional same-origin resource checks, privacy filtering and conservative snapshot/diff with CI exit thresholds.
 
-## Longer-term evaluation / Uzun vadeli değerlendirme
-- Optional JS rendering with a separate security model / Ayrı güvenlik modeliyle isteğe bağlı JS işleme.
-- Accessibility coverage and stable plugin API feasibility / Erişilebilirlik ve kararlı eklenti API değerlendirmesi.
+Future candidates / Gelecek adayları:
+- Explicit rule suppression with an auditable scope / Kapsamı açık kural susturma.
+- More RFC vectors and legacy encoding support / Daha fazla RFC girdisi ve eski kodlama desteği.
+- More precise comparison for changed page graphs / Değişen sayfa yapısında daha ayrıntılı karşılaştırma.
 
-These are proposals, not implemented features or commitments. The current preview provides a local browser workspace; a hosted service, login, database, automatic HTML modification and security score remain out of scope.
+These are proposals, not commitments. HTTP application servers, browser scan workspaces, SaaS/accounts, telemetry, automatic page editing and universal SEO/security scores remain out of scope. JavaScript rendering would require a separate security design and is not supported.
 
-Bunlar öneridir; uygulanmış özellik veya taahhüt değildir. Mevcut önizleme yerel tarayıcı arayüzü sunar; barındırılan hizmet, üyelik, veritabanı, otomatik HTML değiştirme ve güvenlik puanı kapsam dışıdır.
+Bunlar öneridir, taahhüt değildir. Web uygulaması, üyelik, telemetri ve otomatik sayfa düzenleme kapsam dışıdır. JavaScript işleme desteklenmez.

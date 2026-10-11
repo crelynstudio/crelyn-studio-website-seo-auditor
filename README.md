@@ -1,117 +1,164 @@
-# Crelyn Website SEO Auditor
+# SiteMercek
 
-A local website audit tool for broken links, technical SEO, and passive HTTP health checks. Use the browser workspace or the command line, inspect evidence, and export private HTML or JSON reports.
-
-**v0.2.0-preview.1 · Development preview · English (US) and Turkish UI · No accounts, API keys, telemetry, or cloud backend.**
-
-![English website audit workspace with synthetic local fixture findings](docs/screenshots/web-en-desktop.png)
-
-[Mobile view](docs/screenshots/web-en-mobile.png) · [Turkish view](docs/screenshots/web-tr-desktop.png) · [Rules](docs/rules.md) · [Security model](docs/security-model.md)
-
-## Start the web app
-
-Install **Node.js 24** (minimum 22.18), download or clone this repository, and open a terminal in its root:
+**Website Quality & Technical SEO CLI** · Developed by Crelyn Studio
+**Find what broke. Fix what matters.**
 
 ```sh
-npm ci --ignore-scripts
-npm run web
+sitemercek audit https://example.com
+sitemercek diff before.json after.json --fail-on-new error
 ```
 
-Open **http://127.0.0.1:4187** in your browser. Enter the final HTTP(S) origin of a site you control, choose a page budget, and run the audit. The browser app defaults to 20 pages and allows up to 100. Stop the server with Ctrl+C. To change the port:
+These commands use a locally installed package. **0.3.0-preview.1 is a development preview; the npm package has not been published.** [Türkçe documentation](README.tr.md).
+
+SiteMercek checks static HTML, broken internal links and technical SEO from your terminal. It writes local JSON snapshots and standalone HTML reports. It starts no HTTP server and has no browser application, account, API key or telemetry.
+
+## Terminal output
+
+Actual local fixture output (timing varies):
+
+```text
+SiteMercek 0.3.0-preview.1 | Scan summary
+http://127.0.0.1:4765/
+Complete | Pages: 3 | Skipped: 1
+Error: 2 | Warning: 2 | Information: 2
+[Error] HTTP_001 HTTP request failed.
+  http://127.0.0.1:4765/missing
+```
+
+[Full recorded Turkish output](docs/examples/terminal-tr.txt). Fixture data is synthetic.
+
+## Quick start
+
+Node.js **22.18+ or 24.x**, npm and Git. CI checks Node 22 and 24 on Windows, Linux and macOS.
 
 ```sh
-npm run web -- --port 4180
+git clone https://github.com/crelynstudio/crelyn-studio-website-seo-auditor.git
+cd crelyn-studio-website-seo-auditor
+npm ci
+npm run build
+node dist/src/cli/index.js --help
+node dist/src/cli/index.js audit https://example.com --format html,json
 ```
 
-The app binds only to your computer's loopback address. It is a local tool, not a hosted multi-user service. Use the displayed 127.0.0.1 address, rather than localhost. English (US) is the default; choose Türkçe in the header. Your language choice is remembered locally when browser storage is available.
+Installation needs registry access. Auditing needs access to the target and DNS. Saved HTML reports work offline, including filters and language switching.
 
-If a browser keeps showing a different local project, use a fresh port with --port. A previously installed offline app can retain content for the same local origin. The default 4187 avoids the commonly reused 4173 preview address without clearing another project's browser data.
+### Install the local package
 
-## What you can do
+```sh
+npm pack
+npm install --global ./crelynstudio-sitemercek-0.3.0-preview.1.tgz
+sitemercek --version
+sitemercek audit https://example.com --max-pages 100
+sitemercek audit https://example.com --lang tr --format html,json
+```
 
-- Check failed HTTP resources, broken internal links, redirects, titles, descriptions, headings, canonicals, and noindex declarations.
-- Review severity, stable rule IDs, affected URLs, evidence, and suggested fixes.
-- Filter findings by severity or search; expand evidence with the keyboard.
-- Run or cancel an audit from the browser; inspect complete, partial, or aborted coverage.
-- Download JSON or a self-contained HTML report. Saved HTML supports language switching and filters without internet; it cannot start another scan.
-- View the Crelyn Studio developer card and contact links.
+Global installation may require a user-writable npm prefix. `npm run test:package` verifies a temporary local installation instead. `site-audit` remains a transitional alias; prefer `sitemercek`.
 
-Missing descriptions or headings are contextual advice, not proof of a ranking problem. Header checks are passive observations, not vulnerability tests. There is no overall SEO score or search ranking guarantee.
+**After a future npm publication only**, the intended command is `npx @crelynstudio/sitemercek audit https://example.com`. Package ownership and publication are not implied by this preview.
 
-## Try the included example
+### Local fixture
 
-Start the synthetic fixture in another terminal:
+In one terminal:
 
 ```sh
 node examples/demo-server.mjs
 ```
 
-In the web app enter **http://127.0.0.1:4765**, enable **Allow trusted local/private network**, and run an audit. Expect **3 checked pages, 2 errors, 2 warnings, and 2 information findings**. The broken link and duplicate titles are intentional. Fixture content is Turkish; it is source evidence, not untranslated interface text.
-
-Enable private-network access only for trusted local targets. Public sites need no exception. A target URL may redirect from HTTP to HTTPS or between www and bare domains: supply its final origin, because cross-origin redirects are deliberately blocked.
-
-## Command line
+In another:
 
 ```sh
-npm run build
-node dist/src/cli/index.js --help
-node dist/src/cli/index.js audit https://example.com --max-pages 20 --lang en_US
-node dist/src/cli/index.js audit http://127.0.0.1:4765 --allow-private-network --lang tr --format html,json --output ./reports
+node dist/src/cli/index.js audit http://127.0.0.1:4765 --allow-private-network --lang tr --format terminal,html,json
 ```
 
-After installing a locally packed package, the command is **site-audit**. The previous **sitemercek** command remains an alias. The package is **not published to npm**; install from this repository instead of assuming an npx package exists.
+The server above is an explicit test fixture. The audit command never starts it. Stop the fixture with Ctrl+C.
 
-| Option | Default / values |
-| --- | --- |
-| --lang | en_US or tr; legacy en also accepted; JSON uses en/tr for schema compatibility |
-| --max-pages | CLI default 100; range 1–1000 page candidates, including failures and non-HTML |
-| --max-depth | 4; range 0–10; start/sitemap URLs begin at depth 0 |
-| --concurrency | 2; range 1–2; request starts at least 500 ms apart |
-| --timeout | 10000 ms; range 100–60000 per attempt, includes DNS/body, excludes rate waiting |
-| --format | terminal; comma-separated terminal,html,json |
-| --output | ./reports for file outputs |
-| --fail-on | none, error, warning; warning includes errors |
-| --allow-private-network | Off; explicit exception for trusted local/private targets |
+## Features
 
-Terminal output uses stdout; progress uses stderr. JSON alone without --output goes to stdout. File outputs have unique filenames and never overwrite existing files.
-
-Exit codes: **0** complete below threshold; **1** invalid input, runtime failure, or partial/aborted coverage; **2** complete above the chosen finding threshold. An HTTP error finding can still have complete coverage; an unreachable resource makes coverage incomplete.
-
-## Privacy, network policy, and limits
-
-The scanner sends requests to the target origin from your computer. It does not send audits to Crelyn Studio. Reports can include sensitive URLs, query strings, response headers, and page text: review them before sharing. Set-Cookie and WWW-Authenticate are excluded.
-
-- HTTP(S) GET only; no login, cookie jar, form submission, or external-origin crawling.
-- All DNS answers are validated; sockets are pinned to an approved address. Private/reserved addresses are blocked by default. TLS verification stays enabled; environment proxies are ignored.
-- robots.txt is checked before content. The crawler identifies as **CrelynSEOAuditor**. Matching agent groups merge; wildcard groups are used otherwise. Network/5xx/429 robots failures deny access; other 4xx permit it.
-- Five redirect hops, 2 MiB wire/expanded bodies, 16 sitemap documents, XML depth 32, 10,000 discovered URLs and links per document, and bounded request attempts.
-- At most two simultaneous requests with 500 ms between starts; one bounded retry for 429/503.
-- Exclusions and budget limits conservatively produce partial coverage. Read status and skippedChecks before findings.
-- Static HTML only: no JavaScript-rendered target DOM, Core Web Vitals, full accessibility/security audit, legacy charset conversion, sessions, or history comparison.
-
-Installation requires npm access; public scans require access to the target. After installation, local fixtures work without internet. Saved HTML embeds its CSS, JavaScript, and logo, makes no automatic external requests, and uses a hashed script Content Security Policy. Developer links contact their platforms only when clicked.
-
-The web API requires the exact loopback Host, matching Origin, and a per-session token; accepts bounded JSON input; permits one scan at a time. Do not expose it through a public reverse proxy. See the [security model](docs/security-model.md).
-
-## Development and checks
+- Bounded same-origin crawling, URL deduplication, robots.txt and sitemap discovery.
+- HTTP failures, broken internal links, redirect chains, titles, descriptions, H1/heading structure, canonical conflicts, noindex and duplicate metadata.
+- Contextual passive HTTPS header observations, without a security or ranking score.
+- Optional image, script and stylesheet checks through the same protected HTTP client.
+- EN/TR terminal messages, local JSON snapshots, searchable offline HTML with language/severity filters.
+- Snapshot comparison and explicit CI thresholds.
 
 ```sh
+sitemercek audit https://example.com --check-resources --max-resources 100 --max-pages 50
+```
+
+Resource checks cover `img[src]`, `script[src]` and `link[rel=stylesheet][href]` in static HTML. External origins are ignored. Page and resource candidate budgets are separate; shared URLs reuse the HTTP cache. Resources retain robots, origin, DNS/IP, redirect, rate, deadline and body-size limits. No CSS imports, srcset, dynamic DOM or browser rendering.
+
+Run `sitemercek --help` for all options. Defaults: 100 pages, depth 4, concurrency 2, timeout 10000 ms, 100 resources when enabled. Limits: 1000 pages/resources, depth 10, concurrency 2; starts at least 500 ms apart. Sitemap seeds start at depth zero.
+
+## HTML report
+
+Open generated `.html` directly as a file. No server or external scripts/fonts are required. The viewer supports EN/TR, search, severity filters, affected URLs, evidence, fixes, rule documentation, scan scope and skipped checks. It cannot start another audit.
+
+![Static HTML report, synthetic local fixture](docs/screenshots/report-tr-desktop.png)
+
+[Open the sample HTML](docs/examples/demo-tr.html) · [JSON snapshot](docs/examples/demo-tr.json) · [Report schema v2](docs/report.schema.json)
+
+## Snapshot / Diff
+
+```sh
+sitemercek audit https://example.com --format json > before.json
+# Deploy your changes, then repeat with the same options.
+sitemercek audit https://example.com --format json > after.json
+sitemercek diff before.json after.json
+sitemercek diff before.json after.json --format json --fail-on-new warning
+```
+
+JSON alone, without `--output`, goes to stdout. Progress/errors go to stderr. Multiple formats or `--output <directory>` save uniquely named files without overwriting.
+
+Diff emits **NEW**, **RESOLVED**, **UNCHANGED** and **UNVERIFIED**. Identity uses stable rule ID, severity, normalized page/source/target URLs, and invalid canonical evidence where needed. Repeated identical findings are deduplicated. Severity escalation is a new issue.
+
+Schema v2 records rule version, origin/start URL, page/depth/resource budgets, resource mode, private-network policy and completion. Different scope or rule versions are rejected. Both scans must be complete with identical checked page/resource URL sets and redirect destinations for new/resolved classifications. SEO checks that did not execute cannot resolve prior findings. Changed coverage or partial/aborted scans retain common findings and classify unmatched findings as UNVERIFIED; exit 1. This conservative policy may require another comparable scan after the site graph changes.
+
+Legacy schema v1 requires a fresh scan. Snapshots larger than 20 MiB, malformed snapshots and masked URL identities are rejected. Redaction may make sensitive URLs unsuitable for diff; remove secrets from target URLs rather than bypassing masking.
+
+## CI/CD
+
+Use a trusted baseline snapshot created with identical options:
+
+```sh
+node dist/src/cli/index.js audit https://your-site.example --format json > after.json
+node dist/src/cli/index.js diff before.json after.json --fail-on-new error
+```
+
+In CI, check the audit exit status before running diff. The first command may exit 1 for incomplete coverage. [Repository CI](.github/workflows/ci.yml) tests the supported OS/Node matrix, including local package installation. Audit requests still need authorized network access.
+
+| Exit | Meaning |
+| --- | --- |
+| 0 | Complete audit/diff; configured threshold not exceeded |
+| 1 | Invalid input, runtime failure, incomplete scan/diff or incompatible snapshots |
+| 2 | Complete audit exceeds `--fail-on error\|warning`, or diff has new findings meeting `--fail-on-new error\|warning` |
+
+Threshold defaults are `none`. Warnings include errors for gating; information does not trigger a threshold. `NO_COLOR`, CI and non-TTY output disable terminal colors.
+
+## Security and scope
+
+All requests use DNS/IP validation and pinned connections; private/reserved networks are denied by default. Redirects stay on the same origin, TLS verification stays enabled, retries are bounded, and robots failures deny crawling. `--allow-private-network` is only for trusted local/private targets; other safeguards remain active.
+
+Reports use a response-header allowlist and mask common token, credential, cookie, sensitive query, Basic/Bearer and JWT patterns. HTML uses escaped embedded JSON, textContent and a hashed script under a restrictive CSP. Masking is best effort: arbitrary page text, path segments or unknown secret formats can still contain sensitive data. Review reports before sharing.
+
+Static-source observations do not describe JavaScript-rendered DOM. Missing tags may exist after rendering. SEO advice is contextual and gives no Google ranking guarantee. No authentication/session crawling, external-origin audits, accessibility audit, telemetry, automatic fixes or SaaS infrastructure.
+
+[Security model](docs/security-model.md) · [Rules](docs/rules.md) · [Architecture](docs/architecture.md) · [Report a vulnerability](SECURITY.md)
+
+## Contributing
+
+```sh
+npm ci
 npm run typecheck
 npm run lint
 npm test
 npm run build
-npm pack --dry-run
-npm audit
+npm run test:package
 ```
 
-Tests use local HTTP servers and injected DNS, not third-party targets. GitHub Actions checks Node 22 and 24 on Windows, Linux, and macOS. See [verification status](docs/implementation-status.md), [architecture](docs/architecture.md), [CONTRIBUTING](CONTRIBUTING.md), and [SECURITY](SECURITY.md).
-
-[Sample HTML](docs/examples/demo-tr.html) · [Sample JSON](docs/examples/demo-tr.json) · [Terminal output](docs/examples/terminal-tr.txt). These are actual outputs from the included synthetic fixture.
+Tests use local fixtures/injected DNS, not third-party websites. Package installation uses the npm registry. [Contribution guide](CONTRIBUTING.md) · [Changelog](CHANGELOG.md)
 
 ## Developer and license
 
-![Crelyn Studio](assets/CRELYN-DARK.png)
+**Developed by Crelyn Studio** · [Website](https://crelynstudio.com) · [Contact](mailto:info@crelynstudio.com) · [GitHub](https://github.com/crelynstudio)
 
-Developed by **Crelyn Studio**. [Website](https://crelynstudio.com) · [Email](mailto:info@crelynstudio.com) · [GitHub](https://github.com/crelynstudio) · [Behance](https://www.behance.net/crelynstudio) · [Instagram](https://www.instagram.com/crelynstudio/) · [X](https://x.com/crelynstudio) · [Threads](https://www.threads.com/@crelynstudio).
-
-Source code is [MIT licensed](LICENSE). Crelyn Studio names, marks, and logos are not licensed for unrestricted trademark use by the software license. Third-party dependency licenses remain their own. No platform affiliation or endorsement is implied.
+Source code: [MIT](LICENSE). Crelyn Studio names, marks and logos remain separate brand assets; MIT does not grant trademark rights. This is a preview, without an independent security audit.

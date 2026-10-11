@@ -28,7 +28,7 @@ function document(res: http.ServerResponse, body = '<title>Example</title><meta 
 
 test('end-to-end crawl, robots, sitemap index, deduplication, broken links and non-HTML', async () => {
   const s = await site((req, res) => {
-    if (req.url === '/robots.txt') { res.end('User-agent: CrelynSEOAuditor\nDisallow: /private\nAllow: /private/open'); return; }
+    if (req.url === '/robots.txt') { res.end('User-agent: SiteMercek\nDisallow: /private\nAllow: /private/open'); return; }
     if (req.url === '/sitemap.xml') { res.end('<sitemapindex><sitemap><loc>/map.xml</loc></sitemap></sitemapindex>'); return; }
     if (req.url === '/map.xml') { res.end('<urlset><url><loc>/about</loc></url></urlset>'); return; }
     if (req.url === '/') { document(res, '<title>Türkçe</title><a href="/about#x">A</a><a href="/about#y">B</a><a href="/missing">C</a><a href="/private">D</a><a href="/file">File</a><a href="https://example.com">External</a>'); return; }
@@ -38,7 +38,7 @@ test('end-to-end crawl, robots, sitemap index, deduplication, broken links and n
   });
   try {
     const r = await scan(config(s.origin, '--lang', 'tr'));
-    assert.equal(r.schemaVersion, '1'); assert.equal(r.status, 'truncated');
+    assert.equal(r.schemaVersion, '2'); assert.equal(r.status, 'truncated');
     assert.equal(r.pages.length, 4); assert.equal(s.hits.filter(h => h.path === '/about').length, 1);
     assert.ok(!s.hits.some(h => h.path === '/private'));
     assert.ok(r.findings.some(f => f.ruleId === 'LINK_001' && f.sourceUrl === s.origin + '/' && f.targetUrl === s.origin + '/missing'));
@@ -144,12 +144,57 @@ async function cli(args: string[]) {
   child.stdout.on('data', chunk => { stdout += chunk; }); child.stderr.on('data', chunk => { stderr += chunk; });
   const [code] = await once(child, 'close'); return { code, stdout, stderr };
 }
+
+test('optional assets share cache, robots and separate budgets; report headers and secrets are filtered', async () => {
+  const s = await site((req, res) => {
+    if (req.url === '/robots.txt') { res.end('User-agent: SiteMercek\nDisallow: /blocked.png'); return; }
+    if (req.url === '/sitemap.xml') { res.writeHead(404); res.end(); return; }
+    if (req.url === '/') {
+      res.setHeader('Set-Cookie', 'secret-cookie'); res.setHeader('Authorization', 'Bearer header-secret'); res.setHeader('X-Trace-Secret', 'header-secret');
+      document(res, '<title>Bearer title-secret</title><h1>Test</h1><a href="/shared.css">shared</a><img src="/missing.png?token=query-secret"><img src="/missing.png?token=query-secret"><script src="/shared.css"></script><link rel="stylesheet" href="/shared.css"><img src="/blocked.png"><img src="https://external.invalid/a.png">'); return;
+    }
+    if (req.url === '/shared.css') { res.setHeader('Content-Type', 'text/css'); res.end('body{}'); return; }
+    res.writeHead(404); res.end();
+  });
+  try {
+    const disabled = await scan(config(s.origin));
+    assert.deepEqual(disabled.resources, []);
+    assert.ok(!s.hits.some(h => h.path.includes('missing.png')));
+    s.hits.length = 0;
+    const report = await scan(config(s.origin, '--check-resources'));
+    assert.equal(report.pages.length, 2); assert.equal(report.resources!.length, 2);
+    assert.equal(s.hits.filter(h => h.path === '/shared.css').length, 1);
+    assert.equal(s.hits.filter(h => h.path.includes('/missing.png')).length, 1);
+    assert.ok(!s.hits.some(h => h.path === '/blocked.png'));
+    assert.ok(report.findings.some(f => f.ruleId === 'RESOURCE_001' && f.targetUrl?.includes('[REDACTED]')));
+    const serialized = JSON.stringify(report);
+    for (const secret of ['secret-cookie', 'header-secret', 'query-secret', 'title-secret']) assert.ok(!serialized.includes(secret));
+    assert.equal(report.status, 'truncated');
+    const limited = await scan(config(s.origin, '--check-resources', '--max-resources', '1'));
+    assert.equal(limited.pages.length, 2); assert.equal(limited.resources!.length, 1);
+    assert.ok(limited.skippedChecks.some(s => s.reason === 'RESOURCE_LIMIT'));
+  } finally { await s.close(); }
+});
+
+test('CLI diff JSON is clean, thresholds work, and removed web command exits without a listener', async () => {
+  const args = ['diff', 'tests/fixtures/diff/after.json', 'tests/fixtures/diff/before.json'];
+  const json = await cli([...args, '--format', 'json', '--fail-on-new', 'warning']);
+  assert.equal(json.code, 2, json.stderr); assert.equal(json.stderr, '');
+  assert.equal(JSON.parse(json.stdout).NEW[0].ruleId, 'SEO_001');
+  assert.equal((await cli(['web'])).code, 1);
+  assert.equal((await cli(['diff', 'missing', 'missing'])).code, 1);
+  assert.equal((await cli([...args, '--format', 'html'])).code, 1);
+  const reportSource = await readFile('src/reports/html.ts', 'utf8');
+  const script = await readFile('assets/report.js', 'utf8');
+  assert.ok(!/<form\b|scan-form|api\/audit/.test(reportSource));
+  assert.ok(!/fetch\(|XMLHttpRequest|api\/audit|bootstrap\.token/.test(script));
+});
 test('built CLI help/version/about, local JSON/HTML output and exit codes 0/1/2', async () => {
   const s = await site((req, res) => { if (!defaults(req, res)) document(res, '<title> </title><h1>Türkçe içerik</h1>'); });
   const directory = await mkdtemp(join(resolve('tests'), '.tmp-'));
   try {
     assert.ok((await cli(['--help', '--lang', 'tr'])).stdout.includes('Kullanım'));
-    assert.ok((await cli(['--version'])).stdout.includes('0.2.0'));
+    assert.ok((await cli(['--version'])).stdout.includes('0.3.0'));
     assert.ok((await cli(['--about'])).stdout.includes('Crelyn Studio'));
     assert.equal((await cli(['file:///bad'])).code, 1);
     assert.equal((await cli([s.origin])).code, 1);
@@ -157,12 +202,12 @@ test('built CLI help/version/about, local JSON/HTML output and exit codes 0/1/2'
     assert.equal(result.code, 2, result.stderr);
     const files = await readdir(directory); assert.equal(files.length, 2);
     const report = JSON.parse(await readFile(join(directory, files.find(f => f.endsWith('.json'))!), 'utf8'));
-    assert.equal(report.schemaVersion, '1'); assert.equal(report.status, 'complete'); assert.equal(report.config.lang, 'tr');
+    assert.equal(report.schemaVersion, '2'); assert.equal(report.status, 'complete'); assert.equal(report.config.lang, 'tr');
     const validate = new Ajv().compile(JSON.parse(await readFile('docs/report.schema.json', 'utf8')));
     assert.equal(validate(report), true, JSON.stringify(validate.errors));
     assert.equal(validate({ ...report, schemaVersion: 'invalid' }), false);
     const jsonOnly = await cli([s.origin, '--allow-private-network', '--format', 'json']);
-    assert.equal(jsonOnly.code, 0); assert.equal(JSON.parse(jsonOnly.stdout).schemaVersion, '1');
+    assert.equal(jsonOnly.code, 0); assert.equal(JSON.parse(jsonOnly.stdout).schemaVersion, '2');
     assert.ok(!jsonOnly.stdout.includes('Scanning:'));
   } finally {
     await s.close();

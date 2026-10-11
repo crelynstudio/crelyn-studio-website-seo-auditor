@@ -1,11 +1,8 @@
-Synthetic local fixture / Yapay yerel test sitesi
-node dist/src/cli/index.js audit http://127.0.0.1:4765 --allow-private-network --lang tr
-
-Crelyn Website SEO Auditor 0.2.0-preview.1 | Tarama özeti
+SiteMercek 0.3.0-preview.1 | Tarama özeti
 http://127.0.0.1:4765/
 Tamamlandı | Sayfalar: 3 | Atlanan: 1
 Hata: 2 | Uyarı: 2 | Bilgi: 2
-Süre: 2.1 s
+Süre: 2.0 s
 [Hata] HTTP_001 HTTP isteği başarısız.
   http://127.0.0.1:4765/missing
 [Bilgi] IDX_001 Sayfa noindex bildiriyor.
@@ -19,6 +16,6 @@ Süre: 2.1 s
   http://127.0.0.1:4765/about
 [Bilgi] SEO_003 Meta açıklaması boş veya eksik.
   http://127.0.0.1:4765/about
-Yalnızca statik HTTP; JavaScript sonrası DOM, oturum ve erişilebilirlik denetlenmez.
+Yalnızca statik HTTP; JavaScript sonrası DOM, oturum ve erişilebilirlik denetlenmez. Burada eksik etiketler JavaScript sonrası bulunabilir.
 Harici kökenler, formlar ve kimlik doğrulama izlenmez. Genel sağlık puanı verilmez.
 Robots tarafından engellenen adresler ve bütçe sınırları raporda belirtilir. Bulgular taranan kapsamla sınırlıdır.

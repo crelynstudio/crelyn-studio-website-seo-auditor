@@ -1,20 +1,32 @@
 {
-  "name": "@crelynstudio/website-seo-auditor",
-  "version": "0.2.0-preview.1",
-  "description": "Local website audit tool for broken links and technical SEO with browser UI and CLI",
-  "repository": { "type": "git", "url": "https://github.com/crelynstudio/crelyn-studio-website-seo-auditor.git" },
-  "bugs": { "url": "https://github.com/crelynstudio/crelyn-studio-website-seo-auditor/issues" },
-  "keywords": ["website-audit", "technical-seo", "seo", "broken-links", "crawler", "cli"],
+  "name": "@crelynstudio/sitemercek",
+  "version": "0.3.0-preview.1",
+  "description": "Website Quality & Technical SEO CLI. Find what broke. Fix what matters.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/crelynstudio/crelyn-studio-website-seo-auditor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/crelynstudio/crelyn-studio-website-seo-auditor/issues"
+  },
+  "keywords": [
+    "website-audit",
+    "technical-seo",
+    "seo",
+    "broken-links",
+    "crawler",
+    "cli"
+  ],
   "type": "module",
   "bin": {
     "site-audit": "dist/src/cli/index.js",
     "sitemercek": "dist/src/cli/index.js"
   },
   "engines": {
-    "node": ">=22.18.0"
+    "node": "^22.18.0 || ^24.0.0"
   },
   "files": [
-    "dist/src",
+    "dist/src/**/*.js",
     "assets",
     "docs",
     "examples/demo-server.mjs",
@@ -23,26 +35,27 @@
     "SECURITY.md",
     "CODE_OF_CONDUCT.md",
     "CHANGELOG.md",
-    "LICENSE"
+    "LICENSE",
+    "README.tr.md"
   ],
   "scripts": {
     "dev": "npm run build --silent && node dist/src/cli/index.js",
-    "web": "npm run build --silent && node dist/src/cli/index.js web",
-    "build": "tsc -p tsconfig.json",
+    "build": "node scripts/build.mjs",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src tests",
     "test": "npm run build --silent && node --test dist/tests/unit/*.test.js dist/tests/integration/*.test.js",
-    "prepack": "npm run build"
+    "prepack": "npm run build",
+    "test:package": "npm run build --silent && node scripts/package-smoke.mjs"
   },
   "license": "MIT",
   "dependencies": {
     "cheerio": "1.2.0",
     "fast-xml-parser": "5.11.2",
-    "ipaddr.js": "2.2.0"
+    "ipaddr.js": "2.2.0",
+    "ajv": "8.20.0"
   },
   "devDependencies": {
     "@types/node": "24.10.0",
-    "ajv": "8.20.0",
     "eslint": "10.12.0",
     "typescript": "5.9.3",
     "typescript-eslint": "8.71.1"

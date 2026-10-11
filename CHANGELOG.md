@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.3.0-preview.1 — 2026-10-11
+
+- Restore SiteMercek as a CLI-only Website Quality & Technical SEO tool.
+- Remove the browser audit server, web command, scan form/API and browser-only tests.
+- Preserve offline HTML reports with EN/TR, search, severity filters, evidence and documentation.
+- Set npm target @crelynstudio/sitemercek; keep site-audit as a transitional alias.
+- Add opt-in same-origin asset checks with a separate budget and shared protected cache.
+- Add heading-level and duplicate-description observations.
+- Add response-header allowlisting and post-analysis sensitive-value masking.
+- Add schema v2 scope/rule metadata and snapshot/diff NEW/RESOLVED/UNCHANGED/UNVERIFIED output.
+- Refuse unsafe comparisons; add --fail-on-new CI thresholds and JSON stdout.
+- Clean builds prevent stale removed commands from shipping; validate local production package installs in CI.
+- Rewrite CLI documentation and regenerate actual fixture reports. No npm publication or GitHub Release.
+
 ## 0.2.0-preview.1 — 2026-10-11
 
 - Rename to Crelyn Website SEO Auditor; site-audit command with sitemercek compatibility alias.

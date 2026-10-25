@@ -4,7 +4,7 @@
 
 Site adresini gir, taramayı başlat ve hangi sorunlara odaklanacağını gör. SiteMercek benzer teknik SEO ve bozuk bağlantı sorunlarını gruplar; etkilenen sayfaları, kanıtı ve düzeltme önerisini gösterir. Windows uygulamasını kullanmak için hesap, API anahtarı, bulut hizmeti veya terminal gerekmez.
 
-**Durum: 0.4.0-beta.1 yerel beta adayı. Kurulum dosyası henüz yayımlanmadı ve kod imzası yok.**
+**Durum: [0.4.0-beta.1 Windows ön sürümü](https://github.com/crelynstudio/crelyn-studio-website-seo-auditor/releases/tag/v0.4.0-beta.1). Kurulum dosyası imzasızdır.**
 
 ![SiteMercek Windows beta ve yapay yerel test sitesi](docs/screenshots/desktop-beta-tr.png)
 

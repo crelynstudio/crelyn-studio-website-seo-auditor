@@ -4,7 +4,7 @@
 
 Enter a website address, run a scan, and see what needs attention. SiteMercek groups similar technical SEO and broken link issues, then shows affected pages, evidence and suggested fixes. The Windows app needs no account, API key, cloud service or terminal.
 
-**Status: 0.4.0-beta.1 local beta candidate. The installer is not yet published or code signed.**
+**Status: [0.4.0-beta.1 Windows prerelease](https://github.com/crelynstudio/crelyn-studio-website-seo-auditor/releases/tag/v0.4.0-beta.1). The installer is not code signed.**
 
 ![SiteMercek Windows beta with a synthetic local sample site](docs/screenshots/desktop-beta-tr.png)
 

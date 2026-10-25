@@ -1,6 +1,6 @@
 # Roadmap / Yol haritası
 
-Current beta candidate: Windows desktop audit, local reports, grouped findings, EN/TR interface, existing protected crawler and developer CLI.
+Current beta: Windows desktop audit, local reports, grouped findings, EN/TR interface, existing protected crawler and developer CLI.
 
 Possible later work, based on beta feedback: signed installer under a verified publisher identity, macOS/Linux packaging, clearer snapshot comparison in the desktop app and finer rule controls. No dates or commitments are implied.
 

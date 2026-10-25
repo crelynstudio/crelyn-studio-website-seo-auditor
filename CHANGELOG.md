@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.4.0-beta.1 — local candidate, 2026-10-26
+## 0.4.0-beta.1 — Windows beta, 2026-10-26
 
 - Add Windows desktop UI for starting, following and stopping website scans without a terminal.
 - Group similar findings by rule and severity; show affected pages, evidence and suggested fixes.

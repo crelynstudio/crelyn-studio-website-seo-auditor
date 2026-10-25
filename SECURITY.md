@@ -10,6 +10,6 @@ Response headers use an explicit allowlist: content-type/encoding, redirect loca
 
 Masking cannot identify every secret embedded in arbitrary page text, path segments or unknown formats. Inspect saved output before sharing. Masked URL identities are rejected by diff to prevent collisions. Imported snapshots are schema-validated and bounded to 20 MiB. Legacy or incompatible reports fail rather than claiming issues were resolved.
 
-HTML reports use escaped JSON, textContent and a hashed script with connect-src none. There is no HTTP service or scan API. Telemetry, cookie persistence and auth forwarding are absent.
+HTML reports use escaped JSON, textContent and a hashed script with connect-src none. The desktop renderer uses context isolation, a sandbox and a narrow IPC bridge; the crawler runs in the privileged process. There is no HTTP service or scan API. Telemetry, cookie persistence and auth forwarding are absent.
 
 Türkçe: Başlık izin listesi ve analiz sonrası maskeleme uygulanır. Serbest metin/yol parçalarındaki her sır tanınamaz; paylaşmadan kontrol edin. Maskelenmiş URL kimliği diff için reddedilir. HTML raporu sunucusuzdur ve ağ isteği yapamaz.

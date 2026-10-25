@@ -1,4 +1,4 @@
-export const VERSION = '0.3.0-preview.1';
+export const VERSION = '0.4.0-beta.1';
 export const PRODUCT = 'SiteMercek';
 export const RULES_VERSION = '2';
 export type Lang = 'en' | 'tr';

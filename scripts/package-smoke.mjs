@@ -7,6 +7,7 @@ import { once } from 'node:events';
 
 const npm = process.env.npm_execpath;
 assert.ok(npm, 'Run through npm run test:package');
+const version = JSON.parse(await readFile('package.json', 'utf8')).version;
 const directory = await mkdtemp(resolve('tests/.tmp-pack-'));
 function run(args, options = {}) {
   const result = spawnSync(process.execPath, args, { encoding: 'utf8', ...options });
@@ -22,10 +23,10 @@ try {
   const root = join(install, 'node_modules/@crelynstudio/sitemercek');
   const entry = join(root, 'dist/src/cli/index.js');
   assert.ok((await readFile(entry, 'utf8')).startsWith('#!/usr/bin/env node'));
-  assert.equal(run([entry, '--version']).trim(), '0.3.0-preview.1');
+  assert.equal(run([entry, '--version']).trim(), version);
   assert.ok(run([entry, '--help']).includes('sitemercek'));
-  assert.equal(run([npm, 'exec', '--prefix', install, '--offline', '--', 'sitemercek', '--version']).trim(), '0.3.0-preview.1');
-  assert.equal(run([npm, 'exec', '--prefix', install, '--offline', '--', 'site-audit', '--version']).trim(), '0.3.0-preview.1');
+  assert.equal(run([npm, 'exec', '--prefix', install, '--offline', '--', 'sitemercek', '--version']).trim(), version);
+  assert.equal(run([npm, 'exec', '--prefix', install, '--offline', '--', 'site-audit', '--version']).trim(), version);
   const result = JSON.parse(run([entry, 'diff', 'tests/fixtures/diff/before.json', 'tests/fixtures/diff/after.json', '--format', 'json']));
   assert.equal(result.NEW.length, 1); assert.equal(result.RESOLVED.length, 1); assert.equal(result.UNCHANGED.length, 1);
   const server = http.createServer((req, res) => {

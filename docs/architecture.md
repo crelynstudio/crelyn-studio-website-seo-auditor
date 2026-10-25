@@ -1,6 +1,9 @@
 # Architecture
 
-Data flow: CLI → validated configuration → SafeHttp → crawler/parsers → analyzers → redacted snapshot → terminal/JSON/static HTML.
+Data flow: Windows desktop form → validated IPC request → SafeHttp → crawler/parsers → analyzers → redacted snapshot → grouped desktop results and local HTML/JSON export. The developer CLI uses the same crawler and report modules.
+
+- `desktop/index.html`, `app.js`, `app.css`: local EN/TR renderer and light UI, without network or Node access.
+- `desktop/preload.cjs`, `src/desktop`: narrow IPC bridge and main process. The renderer is isolated and sandboxed; external navigation, permissions and arbitrary IPC are denied.
 
 - `src/config`: strict CLI options, bounded budgets, en/en_US/tr normalization.
 - `src/core`: types, SiteMercek identity, package/rule version.
@@ -11,7 +14,7 @@ Data flow: CLI → validated configuration → SafeHttp → crawler/parsers → 
 - `src/i18n`: EN/TR rule and CLI catalogs.
 - `src/reports/privacy.ts`: post-analysis masking; unmodified URLs stay in the live network cache only.
 - `src/reports/diff.ts`: bounded snapshot reads, Ajv schema validation, conservative comparison and CI thresholds.
-- `src/reports/html.ts`, `assets/report.js/css`: standalone viewer only; no scan form, token, fetch API or HTTP server.
+- `src/reports/html.ts`, `assets/report.js/css`: standalone saved report viewer only; no scan form, token, fetch API or HTTP server.
 
 Four production dependencies: HTML parsing (cheerio), XML validation/parsing (fast-xml-parser), IP classification (ipaddr.js), snapshot validation (Ajv). Ajv was already a development dependency and is now included at runtime for untrusted imported reports.
 
@@ -19,6 +22,6 @@ Schema v2 adds rule version, explicit scope and checked resource results. Legacy
 
 Diff identity includes severity so escalations are new. Invalid canonical observations distinguish multiple issues at one URL. Equal scope and complete identical URL/redirect coverage are required for new/resolved results. Partial coverage uses UNVERIFIED; skipped SEO checks cannot resolve existing findings. Different scope/rule versions fail explicitly.
 
-The clean build removes only generated dist output before TypeScript compilation, preventing removed web commands from surviving packaging. npm ships compiled JS, viewer assets, schema and documentation. Tests and source are in Git; test files are excluded from the npm package.
+The clean build removes only generated dist output before TypeScript compilation. Electron Builder creates a Windows x64 NSIS installer from compiled JS, local UI and assets. The npm CLI package remains separate and unpublished. Tests and source are in Git; test files are excluded from the npm package.
 
-Türkçe: CLI doğrulanan ayarlarla güvenli istemciyi çalıştırır; tarayıcı yalnızca kaydedilen raporu görüntüler. Kaynak kontrolünün ayrı bütçesi vardır. Şema v2 kapsam/kural sürümünü kaydeder. Eksik/uyumsuz karşılaştırmada çözüldü iddiası yapılmaz. Yeni kural için iki dilde metin, test, kanıt ve kural belgesi ekleyin.
+Türkçe: Windows arayüzü doğrulanan istekle mevcut güvenli tarayıcıyı çalıştırır; kaydedilen HTML raporu internetsiz açılır. Kaynak kontrolünün ayrı bütçesi vardır. Şema v2 kapsam/kural sürümünü kaydeder. Eksik/uyumsuz karşılaştırmada çözüldü iddiası yapılmaz. Yeni kural için iki dilde metin, test, kanıt ve kural belgesi ekleyin.

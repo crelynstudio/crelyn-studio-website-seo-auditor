@@ -1,75 +1,57 @@
-# SiteMercek — Türkçe kullanım
+# SiteMercek
 
-**Website Quality & Technical SEO CLI** · **Crelyn Studio tarafından geliştirildi**
-**Find what broke. Fix what matters.**
+**Windows için sade ve yerel web sitesi denetimi.** Crelyn Studio tarafından geliştirildi. [English README](README.md)
 
-SiteMercek terminalden statik HTML, teknik SEO ve dahili bağlantıları inceler. Yerel JSON ve bağımsız HTML raporu üretir. Web uygulaması veya localhost analiz servisi başlatmaz.
+Site adresini gir, taramayı başlat ve hangi sorunlara odaklanacağını gör. SiteMercek benzer teknik SEO ve bozuk bağlantı sorunlarını gruplar; etkilenen sayfaları, kanıtı ve düzeltme önerisini gösterir. Windows uygulamasını kullanmak için hesap, API anahtarı, bulut hizmeti veya terminal gerekmez.
 
-**Sürüm: 0.3.0-preview.1 — geliştirme önizlemesi. npm üzerinde yayımlanmadı.** [English README](README.md)
+**Durum: 0.4.0-beta.1 yerel beta adayı. Kurulum dosyası henüz yayımlanmadı ve kod imzası yok.**
 
-## Kaynaktan çalıştırma
+![SiteMercek Windows beta ve yapay yerel test sitesi](docs/screenshots/desktop-beta-tr.png)
 
-Node.js 22.18+ veya 24.x ve npm gerekir.
+## Deneme
 
-```sh
+1. `https://example.com` gibi tam bir adres girip **Siteyi tara** düğmesine bas.
+2. Tarama durumuna bak. Kısmi ve durdurulmuş taramalar açıkça belirtilir.
+3. Bir sorunu açarak etkilenen sayfaları, kanıtı ve öneriyi incele.
+4. Sonuçların üstündeki düğmelerle okunabilir HTML raporu veya JSON verisi kaydet.
+
+Görüntüde yapay bir yerel test sitesi kullanıldı; rakamlar örnektir. Arayüz İngilizce ve Türkçe çalışır, dil seçimi cihazda hatırlanır.
+
+## Kontroller ve sınırlar
+
+- Bağlantılardan ve site haritasından keşfedilen aynı kökenli sayfalar; `robots.txt` kurallarına uyulur.
+- HTTP hataları, bozuk dahili bağlantılar, yönlendirmeler, başlıklar, açıklamalar, heading yapısı, canonical adresler ve indeksleme bildirimi.
+- İsteğe bağlı aynı kökenli görsel, betik ve stil dosyaları.
+
+Varsayılan sınır 100 sayfa ve 4 derinlik seviyesidir. İsteklere boyut, süre ve hız sınırları uygulanır. SiteMercek statik HTML okur; siteye giriş yapamaz veya JavaScript sonrası oluşan içeriği inceleyemez. Google sıralama puanı veya garanti sunmaz. [Kural ayrıntıları](docs/rules.md).
+
+## Gizlilik
+
+Tarama hedef siteye ağ erişimi ister. Raporlar cihazında kalır ve internetsiz açılır; Crelyn Studio'ya yükleme veya telemetri yoktur. Özel ağ adresleri, kontrol ettiğin bir site için açıkça izin vermedikçe engellenir. Yaygın sırlar raporda maskelenir; serbest sayfa metni veya URL yolları hassas bilgi içerebilir. **Raporu paylaşmadan önce kontrol et.** [Güvenlik modeli](docs/security-model.md) · [Güvenlik açığı bildirimi](SECURITY.md).
+
+## Kaynak koddan derleme
+
+Windows x64, Node.js 24 ve npm gerekir. Bağımlılık kurulumu npm erişimi ister.
+
+```powershell
 npm ci
-npm run build
-node dist/src/cli/index.js --help --lang tr
-node dist/src/cli/index.js audit https://example.com --lang tr --format html,json
-```
-
-Yerel paket kurulumundan sonra ana komut `sitemercek` olur:
-
-```sh
-npm pack
-npm install --global ./crelynstudio-sitemercek-0.3.0-preview.1.tgz
-sitemercek audit https://example.com --lang tr
-sitemercek audit https://example.com --check-resources --max-resources 100
-```
-
-Eski `site-audit` geçiş alias'ı korunur. Gelecekte npm yayını yapılmadan `npx @crelynstudio/sitemercek` kullanılabilir kabul edilmemelidir.
-
-## Yerel deneme
-
-Bir terminalde `node examples/demo-server.mjs` çalıştırın. İkinci terminalde:
-
-```sh
-node dist/src/cli/index.js audit http://127.0.0.1:4765 --allow-private-network --lang tr --format terminal,html,json
-```
-
-HTTP sunucusu yalnızca açıkça başlatılan yapay test sitesidir. Audit komutu sunucu başlatmaz. Örnek siteyi Ctrl+C ile durdurun. HTML raporunu dosya olarak açın; filtreler, arama ve dil değiştirme internetsiz çalışır.
-
-## Snapshot ve Diff
-
-```sh
-sitemercek audit https://example.com --format json > before.json
-sitemercek audit https://example.com --format json > after.json
-sitemercek diff before.json after.json --lang tr
-sitemercek diff before.json after.json --format json --fail-on-new error
-```
-
-NEW yeni, RESOLVED çözülen, UNCHANGED devam eden, UNVERIFIED doğrulanamayan bulgulardır. Şema v2, kural sürümü ve kapsam kayıtlıdır. Farklı kapsam/kural sürümleri reddedilir. Eksik tarama veya değişen URL kapsamı yeni/çözülen sonucu üretmez; karşılaştırılamayan bulgular UNVERIFIED olur. Çalıştırılmamış SEO kontrolleri çözülmüş sayılmaz. Maskelenmiş URL kimliği ve eski şema v1 için yeniden tarama gerekir.
-
-Çıkış kodları: **0** tam sonuç ve eşik aşılmadı; **1** geçersiz/uyumsuz/eksik sonuç veya çalışma hatası; **2** tam sonuçta belirlenen hata/uyarı eşiği aşıldı. `--fail-on warning` ve `--fail-on-new warning` hataları da kapsar. Varsayılan eşik `none`. JSON tek biçim ve çıktı klasörü yoksa stdout'a; ilerleme stderr'e yazılır.
-
-## Güvenlik ve sınırlar
-
-DNS/IP doğrulaması, bağlantı sabitleme, özel IP engeli, aynı kökenli yönlendirmeler, robots, TLS, hız/eşzamanlılık, süre/boyut ve yeniden deneme sınırları korunur. Kaynak denetimi isteğe bağlıdır; görsel/betik/stil için sayfalardan ayrı bütçe kullanır. Harici kaynaklar ve JavaScript sonrası DOM taranmaz.
-
-Yanıt başlıkları izin listesine göre alınır. Yaygın hassas sorgu, kimlik bilgisi ve token biçimleri maskelenir. Bilinmeyen sır biçimleri, yol parçaları veya serbest sayfa metni sızabilir; raporu paylaşmadan inceleyin. Telemetri, hesap veya Crelyn Studio'ya otomatik veri gönderimi yoktur.
-
-Statik HTML'de eksik etiket JavaScript sonrası bulunabilir. SEO önerileri Google sıralama garantisi değildir. Kurulum npm erişimi, tarama hedefe ağ erişimi gerektirir. [Kurallar](docs/rules.md), [güvenlik modeli](docs/security-model.md), [katkı](CONTRIBUTING.md).
-
-## Doğrulama
-
-```sh
 npm run typecheck
 npm run lint
 npm test
-npm run build
-npm run test:package
+npm run dist:win
 ```
 
-GitHub Actions Node 22/24 ile Windows/Linux/macOS matrisini çalıştırır. Ana README ve belgelerde güncel kullanım bulunur. Kaynak kod MIT lisanslıdır; marka ve logoların hakları ayrıca korunur.
+Paketlenmiş uygulamayı `.build/win-unpacked/SiteMercek.exe` ile dene. İmzasız kurulum dosyası `.build/SiteMercek-0.4.0-beta.1-win-x64-setup.exe` yolundadır. Windows imzasız dosya için yayıncı veya SmartScreen uyarısı gösterebilir. Derleme çıktısı Git'e eklenmez. Mevcut komut satırı motoru geliştiriciler için korunur: [CLI rehberi](docs/cli.md).
 
-[Crelyn Studio](https://crelynstudio.com) · [İletişim](mailto:info@crelynstudio.com)
+## Bilinen beta sınırları
+
+- Şimdiye kadar yalnızca Windows x64 paketi kontrol edildi.
+- Kurulum dosyası imzasızdır; Crelyn Studio adına güvenilir kod imzalama kimliği henüz yoktur.
+- Giriş gerektiren sayfalar, JavaScript sonrası içerik, dış kökenler ve erişilebilirlik denetimi kapsam dışıdır.
+- Otomatik güncelleme yoktur; sonraki sürüm yeniden indirilir.
+
+## Geliştirici ve lisans
+
+**Crelyn Studio tarafından geliştirildi** · [Web sitesi](https://crelynstudio.com) · [İletişim](mailto:info@crelynstudio.com) · [GitHub](https://github.com/crelynstudio)
+
+Kaynak kod [MIT lisanslıdır](LICENSE). Crelyn Studio adı ve logoları ayrı marka varlıklarıdır; yazılım lisansı marka kullanım hakkı vermez. Üretilen SiteMercek uygulama işareti bu projeye dahildir. Satın alınan UI8 simge paketi bu depoya eklenmemiştir.

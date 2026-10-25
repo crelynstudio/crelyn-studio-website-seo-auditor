@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.4.0-beta.1 — local candidate, 2026-10-26
+
+- Add Windows desktop UI for starting, following and stopping website scans without a terminal.
+- Group similar findings by rule and severity; show affected pages, evidence and suggested fixes.
+- Add local HTML/JSON save dialogs and EN/TR light interface using the supplied brand palette.
+- Keep the protected crawler and developer CLI; add a narrow sandboxed Electron bridge and request validation.
+- Add an original SiteMercek app mark and Windows installer build. Installer is unsigned and unpublished pending hands-on acceptance.
+- Rewrite the main guides for desktop users and retain advanced CLI instructions separately.
+
 ## 0.3.0-preview.1 — 2026-10-11
 
 - Restore SiteMercek as a CLI-only Website Quality & Technical SEO tool.

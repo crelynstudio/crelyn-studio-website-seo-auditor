@@ -6,6 +6,6 @@ Node 24 kurun, `npm ci` sonrasında yukarıdaki kontrolleri çalıştırın. De�
 
 Schema v2 snapshots are validated at the file boundary. Preserve stable rule IDs and bump RULES_VERSION when rule semantics change. Scope mismatches, partial coverage and skipped checks must never imply resolution. Add fixtures for new, resolved and unchanged issues, plus incomplete comparisons. Route assets through the same SafeHttp instance, and keep their candidate budget separate.
 
-Do not restore a web server or browser scan form. Static report scripts may only display/filter/translate existing data. Keep report text safe with textContent and escaped JSON. Snapshot input is capped at 20 MiB; imported reports still require privacy handling.
+Do not add a remote web server or browser scan API. The desktop app calls the crawler from its isolated main process. Static report scripts may only display/filter/translate existing data. Keep report text safe with textContent and escaped JSON. Snapshot input is capped at 20 MiB; imported reports still require privacy handling.
 
-Şema/kural değişikliklerinde diff güvenliğini koruyun. Eksik taramayı çözülmüş saymayın. Web sunucusu veya tarama formu eklemeyin. Kaynak istekleri ortak güvenli istemciden geçmelidir.
+Şema/kural değişikliklerinde diff güvenliğini koruyun. Eksik taramayı çözülmüş saymayın. Uzak web sunucusu veya tarayıcı tarama API'si eklemeyin. Kaynak istekleri ortak güvenli istemciden geçmelidir.

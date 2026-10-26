@@ -1,5 +1,7 @@
 # Website SEO Auditor
 
+<img src="assets/website-seo-auditor-logo.svg" width="56" height="56" alt="Website SEO Auditor logo">
+
 **A local web app for clear, private technical SEO audits.** Developed by Crelyn Studio. [Türkçe rehber](README.tr.md).
 
 Enter a website address, review the scan, and work through grouped findings with affected pages, technical evidence and suggested fixes. The app opens in your browser while its crawler runs on your computer. No account, API key, cloud backend or Electron runtime is needed.

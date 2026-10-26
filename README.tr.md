@@ -1,5 +1,7 @@
 # Website SEO Auditor
 
+<img src="assets/website-seo-auditor-logo.svg" width="56" height="56" alt="Website SEO Auditor logosu">
+
 **Teknik SEO denetimleri için bilgisayarında çalışan web uygulaması.** Crelyn Studio tarafından geliştirildi. [English guide](README.md).
 
 Site adresini gir, tarama sonuçlarını incele ve aynı tür bulguları etkilenen sayfa, teknik kanıt ve düzeltme önerisiyle birlikte gör. Arayüz tarayıcıda açılır; tarayıcı motoru bilgisayarında çalışır. Hesap, API anahtarı, bulut sunucusu veya Electron gerekmez.

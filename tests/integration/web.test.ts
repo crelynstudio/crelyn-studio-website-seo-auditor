@@ -38,6 +38,10 @@ test("local web app serves UI, enforces host/origin and exports a real audit", a
   const home = await fetch(url);
   assert.equal(home.status, 200);
   assert.match(await home.text(), /Website SEO Auditor/);
+  const logo = await fetch(`${url}/logo.svg`);
+  assert.equal(logo.status, 200);
+  assert.match(logo.headers.get("content-type") ?? "", /image\/svg\+xml/);
+  assert.match(await logo.text(), /#696DE2/);
   const badHost = await new Promise<number>((resolve, reject) => {
     const req = httpRequest(
       url,
@@ -104,7 +108,9 @@ test("local web app serves UI, enforces host/origin and exports a real audit", a
     htmlResponse.headers.get("content-disposition") ?? "",
     /Website-SEO-Auditor-127\.0\.0\.1-\d{4}-\d{2}-\d{2}\.html/,
   );
-  assert.match(await htmlResponse.text(), /Website SEO Auditor/);
+  const html = await htmlResponse.text();
+  assert.match(html, /Website SEO Auditor/);
+  assert.match(html, /data:image\/svg\+xml;base64,/);
 });
 
 test("closing the local app requires same-origin POST and stops its listener", async () => {

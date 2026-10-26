@@ -23,8 +23,8 @@ const staticFiles = new Map<string, readonly [URL, string]>([
   ["/app.css", [new URL("app.css", webRoot), "text/css; charset=utf-8"]],
   ["/app.js", [new URL("app.js", webRoot), "text/javascript; charset=utf-8"]],
   [
-    "/logo.png",
-    [new URL("website-seo-auditor-logo.png", assetsRoot), "image/png"],
+    "/logo.svg",
+    [new URL("website-seo-auditor-logo.svg", assetsRoot), "image/svg+xml"],
   ],
   ["/crelyn-logo.png", [new URL("CRELYN-DARK.png", assetsRoot), "image/png"]],
 ]);

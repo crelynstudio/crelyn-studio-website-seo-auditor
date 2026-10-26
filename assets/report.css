@@ -171,10 +171,10 @@ select,
   text-decoration: none;
   font-size: 19px;
 }
-.wordmark svg {
+.wordmark img {
   width: 33px;
-  height: 33px;
-  color: var(--accent);
+  height: auto;
+  flex: none;
 }
 .wordmark strong {
   font-weight: 650;
@@ -527,7 +527,7 @@ main {
   .wordmark {
     font-size: 16px;
   }
-  .wordmark svg {
+  .wordmark img {
     width: 28px;
   }
   .top-actions {

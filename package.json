@@ -1,8 +1,8 @@
 {
-  "name": "@crelynstudio/sitemercek",
+  "name": "@crelynstudio/website-seo-auditor",
   "version": "0.4.0-beta.1",
   "description": "Private desktop website health and technical SEO audits.",
-  "productName": "SiteMercek",
+  "productName": "Website SEO Auditor",
   "author": "Crelyn Studio",
   "main": "dist/src/desktop/main.js",
   "repository": {
@@ -22,8 +22,7 @@
   ],
   "type": "module",
   "bin": {
-    "site-audit": "dist/src/cli/index.js",
-    "sitemercek": "dist/src/cli/index.js"
+    "site-audit": "dist/src/cli/index.js"
   },
   "engines": {
     "node": "^22.18.0 || ^24.0.0"
@@ -53,12 +52,12 @@
     "test:package": "npm run build --silent && node scripts/package-smoke.mjs"
   },
   "build": {
-    "appId": "com.crelynstudio.sitemercek",
-    "productName": "SiteMercek",
-    "artifactName": "SiteMercek-${version}-win-x64-setup.${ext}",
+    "appId": "com.crelynstudio.website-seo-auditor",
+    "productName": "Website SEO Auditor",
+    "artifactName": "Website-SEO-Auditor-${version}-win-x64-setup.${ext}",
     "directories": { "output": ".build" },
     "files": ["dist/src/**/*.js", "desktop/**", "assets/**", "docs/report.schema.json", "package.json"],
-    "win": { "target": "nsis", "icon": "assets/sitemercek.ico" },
+    "win": { "target": "nsis", "icon": "assets/website-seo-auditor.ico" },
     "nsis": { "oneClick": false, "perMachine": false, "allowToChangeInstallationDirectory": true, "createDesktopShortcut": true }
   },
   "license": "MIT",

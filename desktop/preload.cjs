@@ -1,6 +1,6 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
-contextBridge.exposeInMainWorld('siteMercek', {
+contextBridge.exposeInMainWorld('websiteSeoAuditor', {
   startAudit: request => ipcRenderer.invoke('audit:start', request),
   cancelAudit: () => ipcRenderer.invoke('audit:cancel'),
   saveReport: (format, language) => ipcRenderer.invoke('report:save', format, language),

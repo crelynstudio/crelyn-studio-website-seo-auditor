@@ -45,7 +45,7 @@ export function parseRobots(text: string) {
       }
     }
   }
-  const specific = groups.filter(g => g.agents.includes('sitemercek'));
+  const specific = groups.filter(g => g.agents.includes('websiteseoauditor'));
   const rules = (specific.length ? specific : groups.filter(g => g.agents.includes('*'))).flatMap(g => g.rules);
   return { sitemaps, sitemapLimited, allowed(raw: string) {
     const url = new URL(raw), path = octets(url.pathname + url.search);

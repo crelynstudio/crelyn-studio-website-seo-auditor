@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "SiteMercek ScanReport v2",
+  "title": "Website SEO Auditor ScanReport v2",
   "type": "object",
   "required": [
     "schemaVersion",

@@ -50,9 +50,9 @@ Bildirilmiş canonical, kimlik bilgisi içermeyen HTTP(S) adresine çözülemez 
 Birden fazla farklı canonical hedefi. Tek tutarlı hedef kullanın. Aynı hedefi tekrarlamak bu kuralı tetiklemez; otomatik ceza iddiası yoktur.
 
 ## IDX_001
-**info, certain.** `noindex` or `none` found in robots/SiteMercek meta or X-Robots-Tag. Confirm intent. Agent-scoped X-Robots-Tag values are not fully modeled; treat them as observations, not proof of what every crawler will do.
+**info, certain.** `noindex` or `none` found in robots/Website SEO Auditor meta or X-Robots-Tag. Confirm intent. Agent-scoped X-Robots-Tag values are not fully modeled; treat them as observations, not proof of what every crawler will do.
 
-Robots/SiteMercek meta veya X-Robots-Tag içinde noindex/none. Amacınızı doğrulayın. X-Robots-Tag içindeki tüm bot kapsamları modellenmez; her botun davranışı için kanıt değildir.
+Robots/Website SEO Auditor meta veya X-Robots-Tag içinde noindex/none. Amacınızı doğrulayın. X-Robots-Tag içindeki tüm bot kapsamları modellenmez; her botun davranışı için kanıt değildir.
 
 ## IDX_002
 **info for 404; warning otherwise.** Missing sitemap differs from unreadable/invalid XML. Check status/XML. Missing sitemap alone is not critical. Unreadable discovery can make coverage partial.

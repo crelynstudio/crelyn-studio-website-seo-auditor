@@ -20,12 +20,11 @@ try {
   assert.ok(packed.files.every(f => !/^(?:src\/web|dist\/src\/web|tests\/|\.verification\/)|assets\/web\./.test(f.path)));
   const install = join(directory, 'installed');
   run([npm, 'install', '--prefix', install, '--ignore-scripts', '--omit=dev', '--no-audit', '--no-fund', join(directory, packed.filename)]);
-  const root = join(install, 'node_modules/@crelynstudio/sitemercek');
+  const root = join(install, 'node_modules/@crelynstudio/website-seo-auditor');
   const entry = join(root, 'dist/src/cli/index.js');
   assert.ok((await readFile(entry, 'utf8')).startsWith('#!/usr/bin/env node'));
   assert.equal(run([entry, '--version']).trim(), version);
-  assert.ok(run([entry, '--help']).includes('sitemercek'));
-  assert.equal(run([npm, 'exec', '--prefix', install, '--offline', '--', 'sitemercek', '--version']).trim(), version);
+  assert.ok(run([entry, '--help']).includes('site-audit'));
   assert.equal(run([npm, 'exec', '--prefix', install, '--offline', '--', 'site-audit', '--version']).trim(), version);
   const result = JSON.parse(run([entry, 'diff', 'tests/fixtures/diff/before.json', 'tests/fixtures/diff/after.json', '--format', 'json']));
   assert.equal(result.NEW.length, 1); assert.equal(result.RESOLVED.length, 1); assert.equal(result.UNCHANGED.length, 1);
@@ -45,10 +44,10 @@ try {
     assert.equal(report.schemaVersion, '2'); assert.equal(report.status, 'complete');
     assert.ok(report.findings.some(f => f.ruleId === 'RESOURCE_001'));
     const html = await readFile(join(output, files.find(f => f.endsWith('.html'))), 'utf8');
-    assert.ok(html.includes("connect-src 'none'")); assert.ok(html.includes('SiteMercek'));
+    assert.ok(html.includes("connect-src 'none'")); assert.ok(html.includes('Website SEO Auditor'));
     assert.ok(!/<form\b|fetch\(/.test(html));
   } finally { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); }
-  console.log(`Package verified: ${packed.filename}; ${packed.files.length} files; clean production install, both binaries, diff and local audit HTML/JSON passed.`);
+  console.log(`Package verified: ${packed.filename}; ${packed.files.length} files; clean production install, CLI, diff and local audit HTML/JSON passed.`);
 } finally {
   assert.ok(directory.startsWith(resolve('tests') + sep + '.tmp-pack-'));
   await rm(directory, { recursive: true, force: true });

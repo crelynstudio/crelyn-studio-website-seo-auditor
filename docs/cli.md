@@ -1,6 +1,6 @@
 # Developer CLI / Geliştirici komut satırı
 
-The Windows app is the primary user experience. The existing `sitemercek` CLI remains for automation and source level development. Node.js 22.18+ or 24.x is required. The npm package has **not** been published.
+The Windows app is the primary user experience. The `site-audit` CLI remains for automation and source level development. Node.js 22.18+ or 24.x is required. The npm package has **not** been published.
 
 ```sh
 npm ci

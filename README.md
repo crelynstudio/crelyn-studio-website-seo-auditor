@@ -1,12 +1,14 @@
-# SiteMercek
+# Website SEO Auditor
 
 **Private website audits for Windows.** Developed by Crelyn Studio. [Türkçe rehber](README.tr.md).
 
-Enter a website address, run a scan, and see what needs attention. SiteMercek groups similar technical SEO and broken link issues, then shows affected pages, evidence and suggested fixes. The Windows app needs no account, API key, cloud service or terminal.
+Enter a website address, run a scan, and see what needs attention. Website SEO Auditor groups similar technical SEO and broken link issues, then shows affected pages, evidence and suggested fixes. The Windows app needs no account, API key, cloud service or terminal.
 
 **Status: [0.4.0-beta.1 Windows prerelease](https://github.com/crelynstudio/crelyn-studio-website-seo-auditor/releases/tag/v0.4.0-beta.1). The installer is not code signed.**
 
-![SiteMercek Windows beta with a synthetic local sample site](docs/screenshots/desktop-beta-tr.png)
+![Website SEO Auditor Windows home screen](docs/screenshots/desktop-home-tr.png)
+
+![Website SEO Auditor results from a synthetic local sample site](docs/screenshots/desktop-results-tr.png)
 
 ## Try it
 
@@ -15,7 +17,7 @@ Enter a website address, run a scan, and see what needs attention. SiteMercek gr
 3. Open an issue to see affected pages, evidence and a suggested fix.
 4. Save a readable HTML report or JSON data using the buttons above the results.
 
-The screenshot uses a synthetic local test site; its numbers are examples. The interface supports English and Turkish and remembers the selected language on the device.
+The results screenshot uses a synthetic local test site; its numbers are examples. The interface supports English and Turkish and remembers the selected language on the device.
 
 ## Checks and limits
 
@@ -23,7 +25,7 @@ The screenshot uses a synthetic local test site; its numbers are examples. The i
 - HTTP failures, broken internal links, redirects, titles, descriptions, headings, canonical URLs and indexing directives.
 - Optional same origin images, scripts and stylesheets.
 
-The default scan limit is 100 pages and depth 4. Requests have size, time and rate limits. SiteMercek reads static HTML; it cannot sign in or inspect JavaScript rendered content. It offers no Google ranking score or guarantee. [Rule details](docs/rules.md).
+The default scan limit is 100 pages and depth 4. Requests have size, time and rate limits. Website SEO Auditor reads static HTML; it cannot sign in or inspect JavaScript rendered content. It offers no Google ranking score or guarantee. [Rule details](docs/rules.md).
 
 ## Privacy
 
@@ -41,7 +43,7 @@ npm test
 npm run dist:win
 ```
 
-Open `.build/win-unpacked/SiteMercek.exe` to try the packaged app. The unsigned installer is `.build/SiteMercek-0.4.0-beta.1-win-x64-setup.exe`. Windows may show a publisher or SmartScreen warning for unsigned builds. Build output is ignored by Git. The existing command line engine remains available for developers: [CLI reference](docs/cli.md).
+Open `.build/win-unpacked/Website SEO Auditor.exe` to try the packaged app. The unsigned installer is `.build/Website-SEO-Auditor-0.4.0-beta.1-win-x64-setup.exe`. Windows may show a publisher or SmartScreen warning for unsigned builds. Build output is ignored by Git. The existing command line engine remains available for developers: [CLI reference](docs/cli.md).
 
 ## Known beta limits
 
@@ -54,4 +56,4 @@ Open `.build/win-unpacked/SiteMercek.exe` to try the packaged app. The unsigned 
 
 **Developed by Crelyn Studio** · [Website](https://crelynstudio.com) · [Contact](mailto:info@crelynstudio.com) · [GitHub](https://github.com/crelynstudio)
 
-Source code is [MIT licensed](LICENSE). Crelyn Studio names and logos are separate brand assets; MIT does not grant trademark rights. The generated SiteMercek app mark is included for this project. The purchased UI8 icon pack is not included in this repository.
+Source code is [MIT licensed](LICENSE). Crelyn Studio names and logos are separate brand assets; MIT does not grant trademark rights. The generated Website SEO Auditor app mark is included for this project. The purchased UI8 icon pack is not included in this repository.

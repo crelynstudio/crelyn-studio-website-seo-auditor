@@ -10,7 +10,7 @@ import type { ScanReport } from '../core/types.js';
 
 const htmlPath = fileURLToPath(new URL('../../../desktop/index.html', import.meta.url));
 const preloadPath = fileURLToPath(new URL('../../../desktop/preload.cjs', import.meta.url));
-const iconPath = fileURLToPath(new URL('../../../assets/sitemercek-logo-beta.png', import.meta.url));
+const iconPath = fileURLToPath(new URL('../../../assets/website-seo-auditor-logo.png', import.meta.url));
 const externalLinks = new Set([
   'https://crelynstudio.com', 'mailto:info@crelynstudio.com',
   'https://github.com/crelynstudio', 'https://www.behance.net/crelynstudio',
@@ -32,8 +32,10 @@ function createWindow(): void {
   const height = Math.round(width * 9 / 16);
   window = new BrowserWindow({
     width, height, minWidth: 640, minHeight: 360, frame: false, maximizable: false, fullscreenable: false,
-    backgroundColor: '#F2F3F7', icon: iconPath, title: 'SiteMercek',
-    webPreferences: { preload: preloadPath, nodeIntegration: false, contextIsolation: true, sandbox: true, webSecurity: true }
+    show: !app.commandLine.hasSwitch('capture-hidden'),
+    backgroundColor: '#F2F3F7', icon: iconPath, title: 'Website SEO Auditor',
+    webPreferences: { preload: preloadPath, nodeIntegration: false, contextIsolation: true, sandbox: true, webSecurity: true,
+      offscreen: app.commandLine.hasSwitch('capture-hidden') }
   });
   window.setAspectRatio(16 / 9);
   window.webContents.setWindowOpenHandler(({ url }) => {
@@ -99,7 +101,7 @@ app.whenReady().then(() => {
     const selected = format as 'html' | 'json';
     const host = new URL(lastReport.target).hostname.replace(/[^a-z0-9.-]/gi, '-');
     const localDate = new Date(lastReport.startedAt).toLocaleDateString('sv-SE');
-    const defaultPath = join(app.getPath('documents'), `SiteMercek-${host}-${localDate}.${selected}`);
+    const defaultPath = join(app.getPath('documents'), `Website-SEO-Auditor-${host}-${localDate}.${selected}`);
     const choice = await dialog.showSaveDialog(window!, {
       title: language === 'tr' ? 'Raporu kaydet' : 'Save report', defaultPath,
       filters: [{ name: language === 'tr' ? 'Rapor' : 'Report', extensions: [selected] }]

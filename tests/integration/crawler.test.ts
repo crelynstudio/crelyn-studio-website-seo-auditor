@@ -28,7 +28,7 @@ function document(res: http.ServerResponse, body = '<title>Example</title><meta 
 
 test('end-to-end crawl, robots, sitemap index, deduplication, broken links and non-HTML', async () => {
   const s = await site((req, res) => {
-    if (req.url === '/robots.txt') { res.end('User-agent: SiteMercek\nDisallow: /private\nAllow: /private/open'); return; }
+    if (req.url === '/robots.txt') { res.end('User-agent: WebsiteSEOAuditor\nDisallow: /private\nAllow: /private/open'); return; }
     if (req.url === '/sitemap.xml') { res.end('<sitemapindex><sitemap><loc>/map.xml</loc></sitemap></sitemapindex>'); return; }
     if (req.url === '/map.xml') { res.end('<urlset><url><loc>/about</loc></url></urlset>'); return; }
     if (req.url === '/') { document(res, '<title>Türkçe</title><a href="/about#x">A</a><a href="/about#y">B</a><a href="/missing">C</a><a href="/private">D</a><a href="/file">File</a><a href="https://example.com">External</a>'); return; }
@@ -147,7 +147,7 @@ async function cli(args: string[]) {
 
 test('optional assets share cache, robots and separate budgets; report headers and secrets are filtered', async () => {
   const s = await site((req, res) => {
-    if (req.url === '/robots.txt') { res.end('User-agent: SiteMercek\nDisallow: /blocked.png'); return; }
+    if (req.url === '/robots.txt') { res.end('User-agent: WebsiteSEOAuditor\nDisallow: /blocked.png'); return; }
     if (req.url === '/sitemap.xml') { res.writeHead(404); res.end(); return; }
     if (req.url === '/') {
       res.setHeader('Set-Cookie', 'secret-cookie'); res.setHeader('Authorization', 'Bearer header-secret'); res.setHeader('X-Trace-Secret', 'header-secret');

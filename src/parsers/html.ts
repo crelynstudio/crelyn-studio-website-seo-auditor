@@ -12,7 +12,7 @@ export function parseHtml(body: string, page: CrawlPage): void {
   const assets = $('img[src],script[src],link[href]').filter((_, e) => e.tagName !== 'link' || ($(e).attr('rel') ?? '').toLowerCase().split(/\s+/).includes('stylesheet'));
   page.resourceDiscoveryLimited = assets.length > 10000;
   page.canonicals = $('link').filter((_, e) => ($(e).attr('rel') ?? '').toLowerCase().split(/\s+/).includes('canonical')).map((_, e) => $(e).attr('href') ?? '').get();
-  const robots = $('meta').filter((_, e) => ['robots', 'sitemercek', 'crelynseoauditor'].includes(($(e).attr('name') ?? '').toLowerCase())).map((_, e) => $(e).attr('content') ?? '').get().join(',') + ',' + (page.headers['x-robots-tag'] ?? '');
+  const robots = $('meta').filter((_, e) => ['robots', 'websiteseoauditor', 'sitemercek', 'crelynseoauditor'].includes(($(e).attr('name') ?? '').toLowerCase())).map((_, e) => $(e).attr('content') ?? '').get().join(',') + ',' + (page.headers['x-robots-tag'] ?? '');
   page.noindex = /\b(noindex|none)\b/i.test(robots);
   let base = page.finalUrl;
   try { base = normalizeUrl($('base[href]').first().attr('href') ?? '', base); } catch { /* Invalid base falls back to document URL. */ }

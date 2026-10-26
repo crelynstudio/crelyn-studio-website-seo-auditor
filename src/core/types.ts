@@ -1,5 +1,5 @@
 export const VERSION = '0.4.0-beta.1';
-export const PRODUCT = 'SiteMercek';
+export const PRODUCT = 'Website SEO Auditor';
 export const RULES_VERSION = '2';
 export type Lang = 'en' | 'tr';
 export type Severity = 'error' | 'warning' | 'info';

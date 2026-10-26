@@ -126,7 +126,7 @@ export class SafeHttp {
       const request = (url.protocol === 'https:' ? https : http).get(url, {
         agent: false, signal, family: pinned.family,
         lookup: (_host, _options, callback) => callback(null, pinned.address, pinned.family),
-        headers: { 'User-Agent': 'SiteMercek/0.3 (+https://github.com/crelynstudio/crelyn-studio-website-seo-auditor)', 'Accept-Encoding': 'gzip, deflate, br' }
+        headers: { 'User-Agent': 'WebsiteSEOAuditor/0.4 (+https://github.com/crelynstudio/crelyn-studio-website-seo-auditor)', 'Accept-Encoding': 'gzip, deflate, br' }
       }, response => {
         const headers: Record<string, string> = {};
         for (const [key, value] of Object.entries(response.headers)) if (value !== undefined && ['content-type', 'content-encoding', 'location', 'retry-after', 'content-security-policy', 'strict-transport-security', 'x-content-type-options', 'x-robots-tag', 'x-frame-options', 'referrer-policy'].includes(key)) headers[key] = Array.isArray(value) ? value.join(', ') : value;

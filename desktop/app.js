@@ -11,7 +11,7 @@
       pages: 'Pages checked', errors: 'Errors', warnings: 'Warnings', info: 'Information', issuesTitle: 'What to fix first',
       issuesIntro: 'Similar issues are grouped so you can work through them once.', severity: 'Filter by severity', all: 'All issues',
       scanDetails: 'Scan coverage and limitations', aboutEyebrow: 'About', aboutTitle: 'Developed by Crelyn Studio',
-      aboutBody: 'SiteMercek keeps reports on your device. Your website is contacted only to run the scan you start.',
+      aboutBody: 'Website SEO Auditor keeps reports on your device. Your website is contacted only to run the scan you start.',
       website: 'Website', contact: 'Contact', progress: (c, d) => `${c} pages checked · ${d} discovered`,
       complete: 'Scan complete. Review the issues below, starting with errors.',
       partial: 'This scan did not cover every page or check. Review its limits before acting on the results.',
@@ -36,7 +36,7 @@
       pages: 'Kontrol edilen sayfa', errors: 'Hatalar', warnings: 'Uyarılar', info: 'Bilgi', issuesTitle: 'Önce bunları düzelt',
       issuesIntro: 'Aynı tür sorunlar birlikte gösterilir; tek tek uzun liste okumazsın.', severity: 'Önem derecesine göre filtrele', all: 'Tüm sorunlar',
       scanDetails: 'Tarama kapsamı ve sınırlar', aboutEyebrow: 'Hakkında', aboutTitle: 'Crelyn Studio tarafından geliştirildi',
-      aboutBody: 'SiteMercek raporları cihazında tutar. Sitenle yalnızca başlattığın tarama sırasında bağlantı kurar.',
+      aboutBody: 'Website SEO Auditor raporları cihazında tutar. Sitenle yalnızca başlattığın tarama sırasında bağlantı kurar.',
       website: 'Web sitesi', contact: 'İletişim', progress: (c, d) => `${c} sayfa kontrol edildi · ${d} sayfa keşfedildi`,
       complete: 'Tarama tamamlandı. Aşağıdaki sorunları hatalardan başlayarak incele.',
       partial: 'Bu tarama her sayfayı veya kontrolü kapsamadı. Sonuçları kullanmadan önce sınırları incele.',
@@ -60,7 +60,7 @@
     return result;
   };
   let lang = 'en';
-  try { if (localStorage.getItem('sitemercek-language') === 'tr') lang = 'tr'; } catch { /* Local storage is optional. */ }
+  try { if ((localStorage.getItem('website-seo-auditor-language') ?? localStorage.getItem('sitemercek-language')) === 'tr') lang = 'tr'; } catch { /* Local storage is optional. */ }
   let report = null;
   let catalog = null;
   let limitations = null;
@@ -184,17 +184,17 @@
 
   $('language').addEventListener('change', () => {
     lang = $('language').value === 'tr' ? 'tr' : 'en';
-    try { localStorage.setItem('sitemercek-language', lang); } catch { /* Optional. */ }
+    try { localStorage.setItem('website-seo-auditor-language', lang); } catch { /* Optional. */ }
     translate();
   });
   $('severity').addEventListener('change', renderResults);
   for (const [id, action] of [['window-minimize', 'minimize'], ['window-size', 'toggle-size'], ['window-close', 'close']]) {
     $(id).addEventListener('click', async () => {
-      const result = await window.siteMercek.windowControl(action);
+      const result = await window.websiteSeoAuditor.windowControl(action);
       if (action === 'toggle-size' && result.ok) { enlarged = result.enlarged; updateWindowLabels(); }
     });
   }
-  window.siteMercek.onProgress(progress => {
+  window.websiteSeoAuditor.onProgress(progress => {
     $('progress-count').textContent = t('progress')(progress.crawled, progress.discovered);
   });
   $('scan-form').addEventListener('submit', async event => {
@@ -209,7 +209,7 @@
     $('progress').hidden = false;
     $('progress-count').textContent = t('progress')(0, 0);
     try {
-      const response = await window.siteMercek.startAudit({ url: $('url').value, lang, checkResources: $('resources').checked, allowPrivateNetwork: $('private-network').checked });
+      const response = await window.websiteSeoAuditor.startAudit({ url: $('url').value, lang, checkResources: $('resources').checked, allowPrivateNetwork: $('private-network').checked });
       if (!response.ok) {
         notice(response.code?.startsWith('URL_') || response.code?.startsWith('CONFIG_') ? t('invalid') : response.code === 'SCAN_RUNNING' ? t('running') : t('failed'));
         return;
@@ -222,10 +222,10 @@
     } catch { notice(t('failed')); }
     finally { busy = false; $('start').disabled = false; $('progress').hidden = true; }
   });
-  $('cancel').addEventListener('click', async () => { if (await window.siteMercek.cancelAudit()) notice(t('canceled')); });
+  $('cancel').addEventListener('click', async () => { if (await window.websiteSeoAuditor.cancelAudit()) notice(t('canceled')); });
   for (const [id, format] of [['save-html', 'html'], ['save-json', 'json']]) {
     $(id).addEventListener('click', async () => {
-      const result = await window.siteMercek.saveReport(format, lang);
+      const result = await window.websiteSeoAuditor.saveReport(format, lang);
       if (result.ok) notice(t('saved')(result.path), true);
       else if (!result.cancelled) notice(result.code === 'REPORT_UNAVAILABLE' ? t('unavailable') : t('saveFailed'));
     });

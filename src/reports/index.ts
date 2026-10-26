@@ -42,7 +42,7 @@ export async function writeReports(report: ScanReport): Promise<string[]> {
   if (!fileFormats.length) return written;
   const dir = resolve(report.config.output ?? './reports');
   await mkdir(dir, { recursive: true });
-  const stem = `sitemercek-${report.startedAt.replace(/[:.]/g, '-')}-${randomUUID().slice(0, 8)}`;
+  const stem = `website-seo-auditor-${report.startedAt.replace(/[:.]/g, '-')}-${randomUUID().slice(0, 8)}`;
   for (const format of fileFormats) {
     const path = join(dir, `${stem}.${format}`);
     await writeFile(path, format === 'json' ? JSON.stringify(report, null, 2) + '\n' : await html(report), { encoding: 'utf8', flag: 'wx' });

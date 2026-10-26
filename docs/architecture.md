@@ -6,7 +6,7 @@ Data flow: Windows desktop form → validated IPC request → SafeHttp → crawl
 - `desktop/preload.cjs`, `src/desktop`: narrow IPC bridge and main process. The renderer is isolated and sandboxed; external navigation, permissions and arbitrary IPC are denied.
 
 - `src/config`: strict CLI options, bounded budgets, en/en_US/tr normalization.
-- `src/core`: types, SiteMercek identity, package/rule version.
+- `src/core`: types, Website SEO Auditor identity, package/rule version.
 - `src/network`: native HTTP(S), all-answer DNS policy, pinned sockets, shared cache, safe redirects, request/deadline/size/rate budgets, header allowlist.
 - `src/parsers`: robots, sitemap and static HTML. Resources and headings are bounded to 10,000 per document.
 - `src/crawler`: same-origin page queue and sitemap discovery. Optional `resources.ts` shares SafeHttp and has a separate candidate budget. External resources are ignored.

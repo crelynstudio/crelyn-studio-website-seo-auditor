@@ -78,7 +78,7 @@ export function diffTerminal(result: AuditDiff, lang: Lang): string {
   const names = lang === 'tr' ? ['Yeni', 'Çözülen', 'Devam eden', 'Doğrulanamayan'] : ['New', 'Resolved', 'Unchanged', 'Unverified'];
   const m = messages(lang);
   const plain = (text: string) => text.replace(/[\u0000-\u001f\u007f-\u009f]/g, ' ');
-  const lines = [`SiteMercek diff | ${result.status === 'complete' ? m.complete : m.truncated}`, plain(result.target)];
+  const lines = [`Website SEO Auditor diff | ${result.status === 'complete' ? m.complete : m.truncated}`, plain(result.target)];
   (['NEW', 'RESOLVED', 'UNCHANGED', 'UNVERIFIED'] as const).forEach((key, index) => {
     lines.push(`${key} (${names[index]}): ${result[key].length}`, ...result[key].map(f => `  [${m[f.severity]}] ${f.ruleId} ${plain(f.url)}${f.targetUrl ? ' -> ' + plain(f.targetUrl) : ''}`));
   });

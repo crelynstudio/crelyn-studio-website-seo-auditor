@@ -79,7 +79,7 @@
   const $ = id => document.getElementById(id);
   const report = bootstrap.report;
   let lang = report?.config.lang === 'tr' ? 'tr' : 'en';
-  try { const saved = localStorage.getItem('sitemercek-language'); if (['tr', 'en_US'].includes(saved)) lang = saved === 'tr' ? 'tr' : 'en'; } catch { /* Storage can be disabled for local files. */ }
+  try { const saved = localStorage.getItem('website-seo-auditor-language'); if (['tr', 'en_US'].includes(saved)) lang = saved === 'tr' ? 'tr' : 'en'; } catch { /* Storage can be disabled for local files. */ }
   const text = key => ui[lang][key] ?? bootstrap.catalog[lang][key] ?? key;
   function element(tag, content, className) {
     const node = document.createElement(tag);
@@ -136,7 +136,7 @@
   }
   $('language').addEventListener('change', () => {
     lang = $('language').value === 'tr' ? 'tr' : 'en';
-    try { localStorage.setItem('sitemercek-language', lang === 'tr' ? 'tr' : 'en_US'); } catch { /* Optional persistence. */ }
+    try { localStorage.setItem('website-seo-auditor-language', lang === 'tr' ? 'tr' : 'en_US'); } catch { /* Optional persistence. */ }
     render();
   });
   $('search').addEventListener('input', render);

@@ -27,5 +27,3 @@ jobs:
       - run: npm pack --dry-run
 
       - run: npm run test:package
-      - if: matrix.os == 'windows-latest' && matrix.node == 24
-        run: npm run dist:win

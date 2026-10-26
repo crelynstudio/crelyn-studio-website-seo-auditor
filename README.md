@@ -1,59 +1,60 @@
 # Website SEO Auditor
 
-**Private website audits for Windows.** Developed by Crelyn Studio. [Türkçe rehber](README.tr.md).
+**A local web app for clear, private technical SEO audits.** Developed by Crelyn Studio. [Türkçe rehber](README.tr.md).
 
-Enter a website address, run a scan, and see what needs attention. Website SEO Auditor groups similar technical SEO and broken link issues, then shows affected pages, evidence and suggested fixes. The Windows app needs no account, API key, cloud service or terminal.
+Enter a website address, review the scan, and work through grouped findings with affected pages, technical evidence and suggested fixes. The app opens in your browser while its crawler runs on your computer. No account, API key, cloud backend or Electron runtime is needed.
 
-**Status: [0.4.0-beta.1 Windows prerelease](https://github.com/crelynstudio/crelyn-studio-website-seo-auditor/releases/tag/v0.4.0-beta.1). The installer is not code signed.**
+**Status:** `0.5.0-beta.1` is a local review candidate and has not been published. The [earlier Windows beta](https://github.com/crelynstudio/crelyn-studio-website-seo-auditor/releases/tag/v0.4.0-beta.1) is still the public release.
 
-![Website SEO Auditor Windows home screen](docs/screenshots/desktop-home-tr.png)
+![English overview of a real scan against a synthetic local sample site](docs/screenshots/web-overview-en.png)
 
-![Website SEO Auditor results from a synthetic local sample site](docs/screenshots/desktop-results-tr.png)
+![English findings view showing evidence and a suggested fix](docs/screenshots/web-findings-en.png)
 
-## Try it
+![English settings for language and scan limits](docs/screenshots/web-settings-en.png)
 
-1. Enter a full URL such as `https://example.com` and select **Scan website**.
-2. Review the scan status. Partial and stopped scans are identified clearly.
-3. Open an issue to see affected pages, evidence and a suggested fix.
-4. Save a readable HTML report or JSON data using the buttons above the results.
+The screenshots come from the running app and a synthetic local sample website. Its findings are test data.
 
-The results screenshot uses a synthetic local test site; its numbers are examples. The interface supports English and Turkish and remembers the selected language on the device.
+## What it checks
 
-## Checks and limits
-
-- Public, same origin pages discovered from links and sitemaps, respecting `robots.txt`.
+- Public, same-origin pages found in links and sitemaps, while respecting `robots.txt`.
 - HTTP failures, broken internal links, redirects, titles, descriptions, headings, canonical URLs and indexing directives.
-- Optional same origin images, scripts and stylesheets.
+- Optional same-origin images, scripts and stylesheets.
+- Page coverage and issue distribution based on the actual scan, plus downloadable HTML and JSON reports.
 
-The default scan limit is 100 pages and depth 4. Requests have size, time and rate limits. Website SEO Auditor reads static HTML; it cannot sign in or inspect JavaScript rendered content. It offers no Google ranking score or guarantee. [Rule details](docs/rules.md).
+The **Settings** page saves language (English or Turkish), page and depth limits, resource checks and private-network permission in this browser. A scan can be stopped. Partial scans are labeled. [Rule details](docs/rules.md).
 
-## Privacy
+## Run from source
 
-Scanning needs network access to the target site. Reports remain on your device and work offline; there is no telemetry or upload to Crelyn Studio. Private network addresses are blocked unless explicitly enabled for a site you control. Common secrets are masked in saved reports, but arbitrary page text or URL paths may still contain sensitive information. **Review reports before sharing.** [Security model](docs/security-model.md) · [Report a vulnerability](SECURITY.md).
-
-## Build from source
-
-Requires Windows x64, Node.js 24 and npm. Dependency installation needs npm registry access.
+On Windows, install Node.js 24 and npm, then run:
 
 ```powershell
 npm ci
+npm run app
+```
+
+The app opens in your default browser at a random `127.0.0.1` address. Keep the command running while you use the app; press Ctrl+C to stop it. The review candidate does not yet include a one-click Windows download. Developers can also use the [command-line interface](docs/cli.md).
+
+To verify the project:
+
+```powershell
 npm run typecheck
 npm run lint
 npm test
-npm run dist:win
+npm run test:package
 ```
 
-Open `.build/win-unpacked/Website SEO Auditor.exe` to try the packaged app. The unsigned installer is `.build/Website-SEO-Auditor-0.4.0-beta.1-win-x64-setup.exe`. Windows may show a publisher or SmartScreen warning for unsigned builds. Build output is ignored by Git. The existing command line engine remains available for developers: [CLI reference](docs/cli.md).
+Installing dependencies needs access to the npm registry. Once installed, the app needs no external service to open or view an exported report. Scanning a public website requires a network connection to that website.
 
-## Known beta limits
+## Privacy and limits
 
-- Only the Windows x64 package has been checked.
-- The installer is unsigned; a trusted Crelyn Studio signing identity is not available yet.
-- Authentication, JavaScript rendered pages, external origins and accessibility audits are out of scope.
-- There are no automatic updates; new versions require a new download.
+The local server binds to `127.0.0.1` and rejects foreign request origins and hostnames. Reports stay in local server memory until it stops; download HTML or JSON to keep one. Settings remain in this browser's local storage. No telemetry or upload to Crelyn Studio is used. Common secrets are masked in exports, but arbitrary page text and URL paths can still contain private information. **Review reports before sharing.** [Security model](docs/security-model.md) · [Report a vulnerability](SECURITY.md).
+
+The crawler reads static HTML. It cannot sign in or inspect JavaScript-rendered content. It does not measure Google rankings or guarantee SEO outcomes. The default scan covers up to 100 pages at link depth 4. Only a local browser workflow has been checked for this candidate; there is no hosted version or automatic update mechanism.
 
 ## Developer and license
 
 **Developed by Crelyn Studio** · [Website](https://crelynstudio.com) · [Contact](mailto:info@crelynstudio.com) · [GitHub](https://github.com/crelynstudio)
 
-Source code is [MIT licensed](LICENSE). Crelyn Studio names and logos are separate brand assets; MIT does not grant trademark rights. The generated Website SEO Auditor app mark is included for this project. The purchased UI8 icon pack is not included in this repository.
+Source code is [MIT licensed](LICENSE). Crelyn Studio names and logos are separate brand assets; MIT does not grant trademark rights. The original Website SEO Auditor app mark is included for this project. Purchased UI8 source icons are not included.
+
+The Windows portable preview bundles Node.js 24.19.0 under its [own license](third_party/Node.js-LICENSE.txt), also included in the portable folder. Production dependencies keep their own license files.

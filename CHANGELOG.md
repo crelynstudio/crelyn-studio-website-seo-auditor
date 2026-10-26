@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.5.0-beta.1 — local review candidate, 2026-10-26
+
+- Replace the Electron window with a local browser workspace and a loopback-only Node service.
+- Add scan-derived issue distribution, page coverage, per-page issue bars and grouped evidence views.
+- Move language and scan limits into a dedicated EN/TR Settings page; retain local HTML/JSON downloads.
+- Restrict local requests by Host and Origin, preserve crawler protections and redact served reports.
+- Remove the desktop runtime and Turkish interface screenshots; reduce the app mark to its needed display size.
+- This candidate is not published; the previous Windows beta remains the public release.
+
 ## 0.4.0-beta.1 — Windows beta, 2026-10-26
 
 - Add Windows desktop UI for starting, following and stopping website scans without a terminal.

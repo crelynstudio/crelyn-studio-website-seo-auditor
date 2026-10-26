@@ -194,7 +194,7 @@ test('built CLI help/version/about, local JSON/HTML output and exit codes 0/1/2'
   const directory = await mkdtemp(join(resolve('tests'), '.tmp-'));
   try {
     assert.ok((await cli(['--help', '--lang', 'tr'])).stdout.includes('Kullanım'));
-    assert.ok((await cli(['--version'])).stdout.includes('0.4.0-beta.1'));
+    assert.ok((await cli(['--version'])).stdout.includes('0.5.0-beta.1'));
     assert.ok((await cli(['--about'])).stdout.includes('Crelyn Studio'));
     assert.equal((await cli(['file:///bad'])).code, 1);
     assert.equal((await cli([s.origin])).code, 1);

@@ -4,6 +4,7 @@ import { resolve, join, sep } from 'node:path';
 import { spawn, spawnSync } from 'node:child_process';
 import http from 'node:http';
 import { once } from 'node:events';
+import { pathToFileURL } from 'node:url';
 
 const npm = process.env.npm_execpath;
 assert.ok(npm, 'Run through npm run test:package');
@@ -17,13 +18,23 @@ function run(args, options = {}) {
 try {
   const [packed] = JSON.parse(run([npm, 'pack', '--ignore-scripts', '--json', '--pack-destination', directory]));
   assert.ok(packed.files.some(f => f.path === 'dist/src/cli/index.js'));
-  assert.ok(packed.files.every(f => !/^(?:src\/web|dist\/src\/web|tests\/|\.verification\/)|assets\/web\./.test(f.path)));
+  assert.ok(packed.files.some(f => f.path === 'dist/src/web/server.js'));
+  assert.ok(packed.files.some(f => f.path === 'web/index.html'));
+  assert.ok(packed.files.every(f => !/^(?:desktop\/|src\/|tests\/|\.verification\/)/.test(f.path)));
   const install = join(directory, 'installed');
   run([npm, 'install', '--prefix', install, '--ignore-scripts', '--omit=dev', '--no-audit', '--no-fund', join(directory, packed.filename)]);
   const root = join(install, 'node_modules/@crelynstudio/website-seo-auditor');
   const entry = join(root, 'dist/src/cli/index.js');
   assert.ok((await readFile(entry, 'utf8')).startsWith('#!/usr/bin/env node'));
   assert.equal(run([entry, '--version']).trim(), version);
+  const { startWebServer } = await import(pathToFileURL(join(root, 'dist/src/web/server.js')).href);
+  const web = await startWebServer();
+  try {
+    const page = await fetch(web.url);
+    assert.equal(page.status, 200);
+    assert.ok((await page.text()).includes('Website SEO Auditor'));
+    assert.equal((await fetch(`${web.url}/app.js`)).status, 200);
+  } finally { web.server.closeAllConnections(); await new Promise(resolve => web.server.close(resolve)); }
   assert.ok(run([entry, '--help']).includes('site-audit'));
   assert.equal(run([npm, 'exec', '--prefix', install, '--offline', '--', 'site-audit', '--version']).trim(), version);
   const result = JSON.parse(run([entry, 'diff', 'tests/fixtures/diff/before.json', 'tests/fixtures/diff/after.json', '--format', 'json']));

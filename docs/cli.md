@@ -1,6 +1,6 @@
 # Developer CLI / Geliştirici komut satırı
 
-The Windows app is the primary user experience. The `site-audit` CLI remains for automation and source level development. Node.js 22.18+ or 24.x is required. The npm package has **not** been published.
+The local web app is the primary user experience. The `site-audit` CLI remains for automation and source-level development. Node.js 22.18+ or 24.x is required. The npm package has **not** been published.
 
 ```sh
 npm ci
@@ -10,7 +10,7 @@ node dist/src/cli/index.js audit https://example.com --lang tr --check-resources
 node dist/src/cli/index.js --help
 ```
 
-`--format json` alone writes JSON to stdout; otherwise files are saved under `reports/` unless `--output` is set. The HTML report can be opened offline. `--allow-private-network` is for trusted local/private targets only. The CLI uses the same protected crawler and report rules as the desktop app.
+`--format json` alone writes JSON to stdout; otherwise files are saved under `reports/` unless `--output` is set. The HTML report can be opened offline. `--allow-private-network` is for trusted local/private targets only. The CLI uses the same protected crawler and report rules as the local web app.
 
 To compare two compatible complete scans:
 

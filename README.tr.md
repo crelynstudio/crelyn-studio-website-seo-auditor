@@ -1,59 +1,60 @@
 # Website SEO Auditor
 
-**Windows için sade ve yerel web sitesi denetimi.** Crelyn Studio tarafından geliştirildi. [English README](README.md)
+**Teknik SEO denetimleri için bilgisayarında çalışan web uygulaması.** Crelyn Studio tarafından geliştirildi. [English guide](README.md).
 
-Site adresini gir, taramayı başlat ve hangi sorunlara odaklanacağını gör. Website SEO Auditor benzer teknik SEO ve bozuk bağlantı sorunlarını gruplar; etkilenen sayfaları, kanıtı ve düzeltme önerisini gösterir. Windows uygulamasını kullanmak için hesap, API anahtarı, bulut hizmeti veya terminal gerekmez.
+Site adresini gir, tarama sonuçlarını incele ve aynı tür bulguları etkilenen sayfa, teknik kanıt ve düzeltme önerisiyle birlikte gör. Arayüz tarayıcıda açılır; tarayıcı motoru bilgisayarında çalışır. Hesap, API anahtarı, bulut sunucusu veya Electron gerekmez.
 
-**Durum: [0.4.0-beta.1 Windows ön sürümü](https://github.com/crelynstudio/crelyn-studio-website-seo-auditor/releases/tag/v0.4.0-beta.1). Kurulum dosyası imzasızdır.**
+**Durum:** `0.5.0-beta.1` yerel inceleme adayıdır; henüz yayımlanmadı. [Önceki Windows betası](https://github.com/crelynstudio/crelyn-studio-website-seo-auditor/releases/tag/v0.4.0-beta.1) yayımdadır.
 
-![Website SEO Auditor Windows ana ekranı](docs/screenshots/desktop-home-tr.png)
+![Yapay yerel sitede gerçek taramanın İngilizce genel bakış ekranı](docs/screenshots/web-overview-en.png)
 
-![Website SEO Auditor yapay yerel test sitesi sonuçları](docs/screenshots/desktop-results-tr.png)
+![Kanıt ve düzeltme önerisi gösteren İngilizce bulgular ekranı](docs/screenshots/web-findings-en.png)
 
-## Deneme
+![Dil ve tarama sınırları için İngilizce ayarlar ekranı](docs/screenshots/web-settings-en.png)
 
-1. `https://example.com` gibi tam bir adres girip **Siteyi tara** düğmesine bas.
-2. Tarama durumuna bak. Kısmi ve durdurulmuş taramalar açıkça belirtilir.
-3. Bir sorunu açarak etkilenen sayfaları, kanıtı ve öneriyi incele.
-4. Sonuçların üstündeki düğmelerle okunabilir HTML raporu veya JSON verisi kaydet.
+Görüntüler çalışan uygulamadan ve yapay bir yerel test sitesinden alındı; bulgular örnek veridir. GitHub sayfasında Türkçe arayüz ekran görüntüsü kullanılmıyor.
 
-Sonuç görüntüsünde yapay bir yerel test sitesi kullanıldı; rakamlar örnektir. Arayüz İngilizce ve Türkçe çalışır, dil seçimi cihazda hatırlanır.
+## İşlevler
 
-## Kontroller ve sınırlar
+- `robots.txt` kurallarına uyarak aynı sitedeki bağlantı ve site haritası sayfalarını tarar.
+- HTTP hatalarını, bozuk iç bağlantıları, yönlendirmeleri, başlıkları, açıklamaları, H1/canonical/indexleme bildirimlerini inceler.
+- İsteğe bağlı olarak aynı sitedeki görselleri, betikleri ve stil dosyalarını kontrol eder.
+- Gerçek tarama verilerinden kapsam ve sorun dağılımı gösterir; HTML ve JSON raporları indirir.
 
-- Bağlantılardan ve site haritasından keşfedilen aynı kökenli sayfalar; `robots.txt` kurallarına uyulur.
-- HTTP hataları, bozuk dahili bağlantılar, yönlendirmeler, başlıklar, açıklamalar, heading yapısı, canonical adresler ve indeksleme bildirimi.
-- İsteğe bağlı aynı kökenli görsel, betik ve stil dosyaları.
+**Ayarlar** bölümünde dil, sayfa ve derinlik sınırı, dosya kontrolü ve özel ağ izni bu tarayıcıda saklanır. Tarama durdurulabilir; kısmi sonuçlar açıkça işaretlenir. [Kural ayrıntıları](docs/rules.md).
 
-Varsayılan sınır 100 sayfa ve 4 derinlik seviyesidir. İsteklere boyut, süre ve hız sınırları uygulanır. Website SEO Auditor statik HTML okur; siteye giriş yapamaz veya JavaScript sonrası oluşan içeriği inceleyemez. Google sıralama puanı veya garanti sunmaz. [Kural ayrıntıları](docs/rules.md).
+## Kaynak koddan çalıştırma
 
-## Gizlilik
-
-Tarama hedef siteye ağ erişimi ister. Raporlar cihazında kalır ve internetsiz açılır; Crelyn Studio'ya yükleme veya telemetri yoktur. Özel ağ adresleri, kontrol ettiğin bir site için açıkça izin vermedikçe engellenir. Yaygın sırlar raporda maskelenir; serbest sayfa metni veya URL yolları hassas bilgi içerebilir. **Raporu paylaşmadan önce kontrol et.** [Güvenlik modeli](docs/security-model.md) · [Güvenlik açığı bildirimi](SECURITY.md).
-
-## Kaynak koddan derleme
-
-Windows x64, Node.js 24 ve npm gerekir. Bağımlılık kurulumu npm erişimi ister.
+Windows'ta Node.js 24 ve npm kur, ardından:
 
 ```powershell
 npm ci
+npm run app
+```
+
+Uygulama varsayılan tarayıcıda rastgele bir `127.0.0.1` adresiyle açılır. Kullanırken komut çalışmaya devam etmeli; durdurmak için Ctrl+C kullan. Bu inceleme adayında henüz tek tıklamalı Windows paketi yok. Geliştiriciler [komut satırı aracını](docs/cli.md) da kullanabilir.
+
+Kontroller:
+
+```powershell
 npm run typecheck
 npm run lint
 npm test
-npm run dist:win
+npm run test:package
 ```
 
-Paketlenmiş uygulamayı `.build/win-unpacked/Website SEO Auditor.exe` ile dene. İmzasız kurulum dosyası `.build/Website-SEO-Auditor-0.4.0-beta.1-win-x64-setup.exe` yolundadır. Windows imzasız dosya için yayıncı veya SmartScreen uyarısı gösterebilir. Derleme çıktısı Git'e eklenmez. Mevcut komut satırı motoru geliştiriciler için korunur: [CLI rehberi](docs/cli.md).
+İlk bağımlılık kurulumu npm kaynağına erişim ister. Sonrasında arayüz ve indirilmiş rapor harici servis olmadan açılır. Gerçek siteyi taramak için o siteye ağ bağlantısı gerekir.
 
-## Bilinen beta sınırları
+## Gizlilik ve sınırlar
 
-- Şimdiye kadar yalnızca Windows x64 paketi kontrol edildi.
-- Kurulum dosyası imzasızdır; Crelyn Studio adına güvenilir kod imzalama kimliği henüz yoktur.
-- Giriş gerektiren sayfalar, JavaScript sonrası içerik, dış kökenler ve erişilebilirlik denetimi kapsam dışıdır.
-- Otomatik güncelleme yoktur; sonraki sürüm yeniden indirilir.
+Yerel servis yalnızca `127.0.0.1` adresini dinler; farklı köken ve ana makine isteklerini reddeder. Raporlar servis kapanana kadar yerel bellekte tutulur; saklamak için HTML veya JSON indir. Ayarlar tarayıcının yerel depolamasındadır. Telemetri veya Crelyn Studio'ya veri yükleme yoktur. Yaygın gizli değerler dışa aktarmada maskelenir; rastgele metin veya URL yolu yine özel bilgi içerebilir. **Paylaşmadan önce raporu incele.** [Güvenlik modeli](docs/security-model.md) · [Güvenlik bildirimi](SECURITY.md).
+
+Tarayıcı motoru statik HTML okur. Oturum açamaz, JavaScript ile sonradan oluşturulan içeriği inceleyemez; Google sıralaması ölçmez veya sonuç garantisi vermez. Varsayılan sınır 100 sayfa ve 4 bağlantı seviyesidir. Bu adayda yerel tarayıcı akışı denetlendi; barındırılan sürüm veya otomatik güncelleme yoktur.
 
 ## Geliştirici ve lisans
 
 **Crelyn Studio tarafından geliştirildi** · [Web sitesi](https://crelynstudio.com) · [İletişim](mailto:info@crelynstudio.com) · [GitHub](https://github.com/crelynstudio)
 
-Kaynak kod [MIT lisanslıdır](LICENSE). Crelyn Studio adı ve logoları ayrı marka varlıklarıdır; yazılım lisansı marka kullanım hakkı vermez. Üretilen Website SEO Auditor uygulama işareti bu projeye dahildir. Satın alınan UI8 simge paketi bu depoya eklenmemiştir.
+Kaynak kod [MIT lisanslıdır](LICENSE). Crelyn Studio adı ve logolarının marka hakları ayrıdır; MIT marka kullanım hakkı vermez. Özgün Website SEO Auditor işareti bu proje için dahildir. Satın alınan UI8 kaynak simgeleri depoda bulunmaz.
+
+Windows taşınabilir önizlemesi Node.js 24.19.0 içerir; [ayrı lisansı](third_party/Node.js-LICENSE.txt) taşınabilir klasörde de bulunur. Üretim bağımlılıklarının kendi lisans dosyaları korunur.

@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>Website SEO Auditor</title>
+    <link rel="stylesheet" href="/app.css" />
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <svg class="symbols" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <symbol id="i-grid" viewBox="0 0 24 24">
+        <rect x="3" y="3" width="8" height="8" rx="1.5" />
+        <rect x="13" y="3" width="8" height="8" rx="1.5" />
+        <rect x="3" y="13" width="8" height="8" rx="1.5" />
+        <rect x="13" y="13" width="8" height="8" rx="1.5" />
+      </symbol>
+      <symbol id="i-flag" viewBox="0 0 24 24">
+        <path d="M5 21V4m0 1c4-3 7 3 14 0v11c-7 3-10-3-14 0" />
+      </symbol>
+      <symbol id="i-pages" viewBox="0 0 24 24">
+        <path d="M8 3h8l4 4v14H8zM16 3v5h4M4 7v14" />
+        <path d="M11 12h6m-6 4h6" />
+      </symbol>
+      <symbol id="i-report" viewBox="0 0 24 24">
+        <rect x="4" y="3" width="16" height="18" rx="2" />
+        <path d="M8 16v-3m4 3V8m4 8v-5" />
+      </symbol>
+      <symbol id="i-settings" viewBox="0 0 24 24">
+        <path
+          d="M12 3v3m0 12v3M3 12h3m12 0h3M5.6 5.6l2.1 2.1m8.6 8.6 2.1 2.1m0-12.8-2.1 2.1m-8.6 8.6-2.1 2.1"
+        />
+        <circle cx="12" cy="12" r="4" />
+      </symbol>
+      <symbol id="i-info" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 11v6m0-10v1" />
+      </symbol>
+      <symbol id="i-arrow" viewBox="0 0 24 24">
+        <path d="M5 12h14m-6-6 6 6-6 6" />
+      </symbol>
+      <symbol id="i-scan" viewBox="0 0 24 24">
+        <path
+          d="M9 3H5a2 2 0 0 0-2 2v4m12-6h4a2 2 0 0 1 2 2v4M3 15v4a2 2 0 0 0 2 2h4m12-6v4a2 2 0 0 1-2 2h-4M7 12h10"
+        />
+      </symbol>
+      <symbol id="i-download" viewBox="0 0 24 24">
+        <path d="M12 3v12m-4-4 4 4 4-4M4 18v3h16v-3" />
+      </symbol>
+    </svg>
+    <a class="skip-link" href="#content" data-t="skip">Skip to content</a>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Main navigation">
+        <div class="brand">
+          <img src="/logo.png" width="37" height="37" alt="" />
+          <div>
+            <strong>Website SEO<br />Auditor</strong
+            ><small>by Crelyn Studio</small>
+          </div>
+        </div>
+        <div class="workspace-label" data-t="workspace">Workspace</div>
+        <nav class="main-nav" aria-label="Workspace">
+          <button
+            class="nav-item active"
+            type="button"
+            data-page-target="overview"
+          >
+            <svg><use href="#i-grid" /></svg
+            ><span data-t="overview">Overview</span>
+          </button>
+          <button class="nav-item" type="button" data-page-target="findings">
+            <svg><use href="#i-flag" /></svg
+            ><span data-t="findings">Findings</span
+            ><span id="nav-finding-count" class="nav-count" hidden></span>
+          </button>
+          <button class="nav-item" type="button" data-page-target="pages">
+            <svg><use href="#i-pages" /></svg><span data-t="pages">Pages</span>
+          </button>
+          <button class="nav-item" type="button" data-page-target="reports">
+            <svg><use href="#i-report" /></svg
+            ><span data-t="reports">Reports</span>
+          </button>
+        </nav>
+        <div class="sidebar-bottom">
+          <button class="nav-item" type="button" data-page-target="settings">
+            <svg><use href="#i-settings" /></svg
+            ><span data-t="settings">Settings</span></button
+          ><button class="nav-item" type="button" data-page-target="about">
+            <svg><use href="#i-info" /></svg><span data-t="about">About</span>
+          </button>
+          <p data-t="localNote">Runs on this computer. No account required.</p>
+        </div>
+      </aside>
+      <div class="main-frame">
+        <header class="topbar">
+          <div class="top-left">
+            <img src="/logo.png" width="29" height="29" alt="" /><span
+              id="breadcrumb"
+              >Overview</span
+            >
+          </div>
+          <div class="top-right">
+            <span class="local-status"
+              ><span></span><span data-t="local">Local workspace</span></span
+            ><span class="beta">BETA</span>
+          </div>
+        </header>
+        <main id="content">
+          <section
+            class="view active"
+            data-page="overview"
+            aria-labelledby="overview-title"
+          >
+            <div class="page-heading">
+              <div>
+                <p class="eyebrow" data-t="overviewLabel">
+                  Website intelligence
+                </p>
+                <h1 id="overview-title" data-t="overviewTitle">
+                  A clear view of your website.
+                </h1>
+                <p data-t="overviewIntro">
+                  Run a local audit and turn technical signals into a focused
+                  action list.
+                </p>
+              </div>
+            </div>
+            <form id="scan-form" class="scan-card" novalidate>
+              <div class="scan-card-copy">
+                <span class="scan-symbol"
+                  ><svg><use href="#i-scan" /></svg
+                ></span>
+                <div>
+                  <h2 data-t="scanTitle">Start a new audit</h2>
+                  <p data-t="scanIntro">
+                    Enter a website address. Only pages within that site are
+                    checked.
+                  </p>
+                </div>
+              </div>
+              <label for="site-url" data-t="siteUrl">Website URL</label>
+              <div class="scan-row">
+                <input
+                  id="site-url"
+                  type="url"
+                  inputmode="url"
+                  autocomplete="url"
+                  spellcheck="false"
+                  placeholder="https://example.com"
+                  required
+                /><button id="scan-button" class="button-primary" type="submit">
+                  <span data-t="runAudit">Run audit</span
+                  ><svg><use href="#i-arrow" /></svg>
+                </button>
+              </div>
+              <div class="scan-foot">
+                <span data-t="scanHint">Uses your saved scan settings</span
+                ><button
+                  type="button"
+                  class="text-button"
+                  data-page-target="settings"
+                  data-t="editSettings"
+                >
+                  Edit settings
+                </button>
+              </div>
+            </form>
+            <div id="notice" class="notice" role="alert" hidden></div>
+            <div
+              id="progress"
+              class="progress-card"
+              role="status"
+              aria-live="polite"
+              hidden
+            >
+              <div>
+                <span class="pulse"></span
+                ><strong data-t="scanning">Scanning website</strong
+                ><span id="progress-count"></span>
+              </div>
+              <button
+                id="cancel"
+                class="text-button"
+                type="button"
+                data-t="stopScan"
+              >
+                Stop scan
+              </button>
+            </div>
+            <div id="empty-overview" class="empty-card">
+              <div class="empty-illustration">
+                <svg><use href="#i-report" /></svg>
+              </div>
+              <h2 data-t="emptyTitle">Your first audit starts here</h2>
+              <p data-t="emptyIntro">
+                Run a scan to see page coverage, issue distribution and
+                practical fixes. Results stay in this browser session until you
+                close it.
+              </p>
+            </div>
+            <div id="dashboard" hidden>
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow" data-t="latestAudit">Latest audit</p>
+                  <h2 id="audited-site"></h2>
+                  <p id="audit-meta"></p>
+                </div>
+                <span id="audit-status" class="status-pill"></span>
+              </div>
+              <div class="metrics">
+                <div>
+                  <strong id="metric-pages">0</strong
+                  ><span data-t="pagesChecked">Pages checked</span>
+                </div>
+                <div>
+                  <strong id="metric-errors">0</strong
+                  ><span data-t="errors">Errors</span>
+                </div>
+                <div>
+                  <strong id="metric-warnings">0</strong
+                  ><span data-t="warnings">Warnings</span>
+                </div>
+                <div>
+                  <strong id="metric-info">0</strong
+                  ><span data-t="information">Information</span>
+                </div>
+              </div>
+              <div class="dashboard-grid">
+                <section class="panel" aria-labelledby="distribution-title">
+                  <div class="panel-head">
+                    <div>
+                      <h3 id="distribution-title" data-t="distribution">
+                        Issue distribution
+                      </h3>
+                      <p data-t="distributionIntro">
+                        Findings in scanned pages
+                      </p>
+                    </div>
+                    <span id="total-findings" class="figure"></span>
+                  </div>
+                  <div id="distribution-chart" class="distribution-chart"></div>
+                  <div id="distribution-legend" class="legend"></div>
+                </section>
+                <section class="panel" aria-labelledby="coverage-title">
+                  <div class="panel-head">
+                    <div>
+                      <h3 id="coverage-title" data-t="coverage">
+                        Page coverage
+                      </h3>
+                      <p data-t="coverageIntro">Crawled versus discovered</p>
+                    </div>
+                    <span id="coverage-percent" class="figure"></span>
+                  </div>
+                  <div class="coverage-visual">
+                    <div class="coverage-track">
+                      <span id="coverage-fill"></span>
+                    </div>
+                    <div id="coverage-labels" class="coverage-labels"></div>
+                  </div>
+                  <button
+                    class="inline-link"
+                    type="button"
+                    data-page-target="reports"
+                  >
+                    <span data-t="viewCoverage">View scan scope</span
+                    ><svg><use href="#i-arrow" /></svg>
+                  </button>
+                </section>
+              </div>
+              <section class="panel priority-panel">
+                <div class="panel-head">
+                  <div>
+                    <h3 data-t="priorityFindings">Priority findings</h3>
+                    <p data-t="priorityIntro">
+                      Grouped by issue so you can fix the cause once
+                    </p>
+                  </div>
+                  <button
+                    class="inline-link"
+                    type="button"
+                    data-page-target="findings"
+                  >
+                    <span data-t="viewAll">View all</span
+                    ><svg><use href="#i-arrow" /></svg>
+                  </button>
+                </div>
+                <div id="priority-list"></div>
+              </section>
+            </div>
+          </section>
+          <section
+            class="view"
+            data-page="findings"
+            aria-labelledby="findings-title"
+          >
+            <div class="page-heading compact">
+              <div>
+                <p class="eyebrow" data-t="auditResults">Audit results</p>
+                <h1 id="findings-title" data-t="findings">Findings</h1>
+                <p data-t="findingsIntro">
+                  Review the evidence, affected pages and a suggested next step.
+                </p>
+              </div>
+            </div>
+            <div id="findings-empty" class="empty-card">
+              <h2 data-t="noAudit">No audit yet</h2>
+              <p data-t="runFirst">
+                Run an audit from Overview to fill this page.
+              </p>
+              <button
+                class="button-secondary"
+                type="button"
+                data-page-target="overview"
+                data-t="goOverview"
+              >
+                Go to Overview
+              </button>
+            </div>
+            <div id="findings-content" hidden>
+              <div class="toolbar">
+                <input
+                  id="finding-search"
+                  type="search"
+                  data-placeholder="searchFindings"
+                  placeholder="Search issues or URLs"
+                  aria-label="Search findings"
+                /><select
+                  id="severity-filter"
+                  aria-label="Filter findings by severity"
+                >
+                  <option value="all" data-t="allFindings">All findings</option>
+                  <option value="error" data-t="errors">Errors</option>
+                  <option value="warning" data-t="warnings">Warnings</option>
+                  <option value="info" data-t="information">Information</option>
+                </select>
+              </div>
+              <div id="finding-list" class="finding-list"></div>
+              <p id="finding-none" class="empty-inline" hidden></p>
+            </div>
+          </section>
+          <section class="view" data-page="pages" aria-labelledby="pages-title">
+            <div class="page-heading compact">
+              <div>
+                <p class="eyebrow" data-t="auditResults">Audit results</p>
+                <h1 id="pages-title" data-t="pages">Pages</h1>
+                <p data-t="pagesIntro">
+                  See which pages were checked and where issues occur.
+                </p>
+              </div>
+            </div>
+            <div id="pages-empty" class="empty-card">
+              <h2 data-t="noAudit">No audit yet</h2>
+              <p data-t="runFirst">
+                Run an audit from Overview to fill this page.
+              </p>
+              <button
+                class="button-secondary"
+                type="button"
+                data-page-target="overview"
+                data-t="goOverview"
+              >
+                Go to Overview
+              </button>
+            </div>
+            <div id="pages-content" hidden>
+              <div class="panel">
+                <div class="panel-head">
+                  <div>
+                    <h3 data-t="pageIssueCounts">Issues by page</h3>
+                    <p data-t="pageIssueIntro">
+                      Bars show finding counts on each crawled page
+                    </p>
+                  </div>
+                </div>
+                <div id="page-chart" class="page-chart"></div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th data-t="page">Page</th>
+                      <th data-t="httpStatus">HTTP status</th>
+                      <th data-t="issues">Issues</th>
+                    </tr>
+                  </thead>
+                  <tbody id="page-rows"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+          <section
+            class="view"
+            data-page="reports"
+            aria-labelledby="reports-title"
+          >
+            <div class="page-heading compact">
+              <div>
+                <p class="eyebrow" data-t="auditResults">Audit results</p>
+                <h1 id="reports-title" data-t="reports">Reports</h1>
+                <p data-t="reportsIntro">
+                  Download the current audit and check what the scan covered.
+                </p>
+              </div>
+            </div>
+            <div id="reports-empty" class="empty-card">
+              <h2 data-t="noAudit">No audit yet</h2>
+              <p data-t="runFirst">
+                Run an audit from Overview to fill this page.
+              </p>
+              <button
+                class="button-secondary"
+                type="button"
+                data-page-target="overview"
+                data-t="goOverview"
+              >
+                Go to Overview
+              </button>
+            </div>
+            <div id="reports-content" hidden>
+              <div class="export-grid">
+                <div class="panel export-panel">
+                  <svg><use href="#i-report" /></svg>
+                  <h2 data-t="readableReport">Readable report</h2>
+                  <p data-t="readableIntro">
+                    An HTML file with findings, evidence and scope. Opens
+                    without this app.
+                  </p>
+                  <button
+                    id="download-html"
+                    class="button-secondary"
+                    type="button"
+                  >
+                    <svg><use href="#i-download" /></svg
+                    ><span data-t="downloadHtml">Download HTML</span>
+                  </button>
+                </div>
+                <div class="panel export-panel">
+                  <svg><use href="#i-pages" /></svg>
+                  <h2 data-t="dataReport">Structured data</h2>
+                  <p data-t="dataIntro">
+                    A JSON file for your own analysis or records.
+                  </p>
+                  <button
+                    id="download-json"
+                    class="button-secondary"
+                    type="button"
+                  >
+                    <svg><use href="#i-download" /></svg
+                    ><span data-t="downloadJson">Download JSON</span>
+                  </button>
+                </div>
+              </div>
+              <div class="panel scope-panel">
+                <h2 data-t="scanScope">Scan scope and limits</h2>
+                <div id="scope-details"></div>
+              </div>
+            </div>
+          </section>
+          <section
+            class="view"
+            data-page="settings"
+            aria-labelledby="settings-title"
+          >
+            <div class="page-heading compact">
+              <div>
+                <p class="eyebrow" data-t="preferences">Preferences</p>
+                <h1 id="settings-title" data-t="settings">Settings</h1>
+                <p data-t="settingsIntro">
+                  Choose how this browser runs future audits. Changes are saved
+                  on this device.
+                </p>
+              </div>
+            </div>
+            <form id="settings-form" class="settings-form">
+              <div class="settings-section">
+                <div>
+                  <h2 data-t="interface">Interface</h2>
+                  <p data-t="interfaceIntro">
+                    Choose your language for the application.
+                  </p>
+                </div>
+                <label class="setting-field"
+                  ><span data-t="language">Language</span
+                  ><select id="setting-language">
+                    <option value="en">English</option>
+                    <option value="tr">Türkçe</option>
+                  </select></label
+                >
+              </div>
+              <div class="settings-section">
+                <div>
+                  <h2 data-t="scanDefaults">Scan defaults</h2>
+                  <p data-t="scanDefaultsIntro">
+                    These limits apply to the next scan. Increasing them takes
+                    longer.
+                  </p>
+                </div>
+                <div class="settings-controls">
+                  <label class="setting-field"
+                    ><span data-t="maxPages">Maximum pages</span
+                    ><input
+                      id="setting-pages"
+                      type="number"
+                      min="1"
+                      max="1000"
+                      step="1"
+                      required
+                    /><small data-t="maxPagesHint">1–1000 pages</small></label
+                  ><label class="setting-field"
+                    ><span data-t="maxDepth">Link depth</span
+                    ><input
+                      id="setting-depth"
+                      type="number"
+                      min="0"
+                      max="10"
+                      step="1"
+                      required
+                    /><small data-t="maxDepthHint">0–10 levels</small></label
+                  ><label class="toggle-field"
+                    ><input id="setting-resources" type="checkbox" /><span
+                      ><strong data-t="resources"
+                        >Check images, scripts and stylesheets</strong
+                      ><small data-t="resourcesHint"
+                        >Adds same-site asset checks to the audit.</small
+                      ></span
+                    ></label
+                  ><label class="toggle-field"
+                    ><input id="setting-private" type="checkbox" /><span
+                      ><strong data-t="privateNetwork"
+                        >Allow private network sites</strong
+                      ><small data-t="privateHint"
+                        >Only enable this for sites you control.</small
+                      ></span
+                    ></label
+                  >
+                </div>
+              </div>
+              <div class="settings-actions">
+                <button
+                  class="button-primary"
+                  type="submit"
+                  data-t="saveSettings"
+                >
+                  Save settings</button
+                ><span id="settings-saved" role="status"></span>
+              </div>
+            </form>
+            <div class="close-app">
+              <div>
+                <h2 data-t="closeTitle">Close local app</h2>
+                <p data-t="closeIntro">
+                  Stops the local service. Download the current report first if
+                  you want to keep it.
+                </p>
+              </div>
+              <button
+                id="close-app"
+                class="button-secondary"
+                type="button"
+                data-t="closeApp"
+              >
+                Close app
+              </button>
+              <p id="close-message" role="status"></p>
+            </div>
+          </section>
+          <section class="view" data-page="about" aria-labelledby="about-title">
+            <div class="page-heading compact">
+              <div>
+                <p class="eyebrow" data-t="product">Product</p>
+                <h1 id="about-title" data-t="about">About</h1>
+                <p data-t="aboutIntro">
+                  A focused, local tool for website health and technical SEO.
+                </p>
+              </div>
+            </div>
+            <div class="panel about-panel">
+              <img src="/crelyn-logo.png" alt="Crelyn Studio" width="176" />
+              <h2 data-t="developed">Developed by Crelyn Studio</h2>
+              <p data-t="aboutBody">
+                This open-source tool is developed by Crelyn Studio. Audits
+                contact the target website; reports stay on this computer unless
+                you export them.
+              </p>
+              <div class="about-links">
+                <a
+                  href="https://crelynstudio.com"
+                  target="_blank"
+                  rel="noopener"
+                  data-t="website"
+                  >Website</a
+                ><a href="mailto:info@crelynstudio.com" data-t="contact"
+                  >Contact</a
+                ><a
+                  href="https://github.com/crelynstudio"
+                  target="_blank"
+                  rel="noopener"
+                  >GitHub</a
+                ><a
+                  href="https://www.behance.net/crelynstudio"
+                  target="_blank"
+                  rel="noopener"
+                  >Behance</a
+                ><a
+                  href="https://www.instagram.com/crelynstudio/"
+                  target="_blank"
+                  rel="noopener"
+                  >Instagram</a
+                ><a
+                  href="https://x.com/crelynstudio"
+                  target="_blank"
+                  rel="noopener"
+                  >X</a
+                ><a
+                  href="https://www.threads.com/@crelynstudio"
+                  target="_blank"
+                  rel="noopener"
+                  >Threads</a
+                >
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>

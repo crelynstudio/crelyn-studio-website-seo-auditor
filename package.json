@@ -1,10 +1,10 @@
 {
   "name": "@crelynstudio/website-seo-auditor",
-  "version": "0.4.0-beta.1",
-  "description": "Private desktop website health and technical SEO audits.",
+  "version": "0.5.0-beta.1",
+  "description": "Private local web app for website health and technical SEO audits.",
   "productName": "Website SEO Auditor",
   "author": "Crelyn Studio",
-  "main": "dist/src/desktop/main.js",
+  "main": "dist/src/web/server.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/crelynstudio/crelyn-studio-website-seo-auditor.git"
@@ -29,6 +29,7 @@
   },
   "files": [
     "dist/src/**/*.js",
+    "web",
     "assets",
     "docs",
     "examples/demo-server.mjs",
@@ -42,23 +43,14 @@
   ],
   "scripts": {
     "dev": "npm run build --silent && node dist/src/cli/index.js",
-    "app": "npm run build --silent && electron .",
-    "dist:win": "npm run build --silent && electron-builder --win nsis --x64 --publish never",
+    "app": "npm run build --silent && node dist/src/web/server.js",
+    "dist:portable": "npm run build --silent && node scripts/build-portable.mjs",
     "build": "node scripts/build.mjs",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint src tests desktop",
+    "lint": "eslint src tests web",
     "test": "npm run build --silent && node --test dist/tests/unit/*.test.js dist/tests/integration/*.test.js",
     "prepack": "npm run build",
     "test:package": "npm run build --silent && node scripts/package-smoke.mjs"
-  },
-  "build": {
-    "appId": "com.crelynstudio.website-seo-auditor",
-    "productName": "Website SEO Auditor",
-    "artifactName": "Website-SEO-Auditor-${version}-win-x64-setup.${ext}",
-    "directories": { "output": ".build" },
-    "files": ["dist/src/**/*.js", "desktop/**", "assets/**", "docs/report.schema.json", "package.json"],
-    "win": { "target": "nsis", "icon": "assets/website-seo-auditor.ico" },
-    "nsis": { "oneClick": false, "perMachine": false, "allowToChangeInstallationDirectory": true, "createDesktopShortcut": true }
   },
   "license": "MIT",
   "dependencies": {
@@ -69,8 +61,6 @@
   },
   "devDependencies": {
     "@types/node": "24.10.0",
-    "electron": "45.0.0",
-    "electron-builder": "26.18.0",
     "eslint": "10.12.0",
     "typescript": "5.9.3",
     "typescript-eslint": "8.71.1"

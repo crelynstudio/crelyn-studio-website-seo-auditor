@@ -44,7 +44,7 @@
   "scripts": {
     "dev": "npm run build --silent && node dist/src/cli/index.js",
     "app": "npm run build --silent && electron .",
-    "dist:win": "npm run build --silent && electron-builder --win nsis --x64",
+    "dist:win": "npm run build --silent && electron-builder --win nsis --x64 --publish never",
     "build": "node scripts/build.mjs",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src tests desktop",

@@ -806,6 +806,7 @@
   void (async () => {
     try {
       meta = await api("/api/meta");
+      $("app-version").textContent = `${meta.product} · v${meta.version}`;
       const state = await api("/api/state");
       if (state.ready) report = await api("/api/report");
       if (state.active) {

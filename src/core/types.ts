@@ -1,4 +1,4 @@
-export const VERSION = '0.5.0-beta.1';
+export const VERSION = '0.5.0-beta.2';
 export const PRODUCT = 'Website SEO Auditor';
 export const RULES_VERSION = '2';
 export type Lang = 'en' | 'tr';

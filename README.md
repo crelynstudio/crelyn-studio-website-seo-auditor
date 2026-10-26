@@ -6,7 +6,7 @@
 
 Enter a website address, review the scan, and work through grouped findings with affected pages, technical evidence and suggested fixes. The app opens in your browser while its crawler runs on your computer. No account, API key, cloud backend or Electron runtime is needed.
 
-**Status:** `0.5.0-beta.1` is a local review candidate and has not been published. The [earlier Windows beta](https://github.com/crelynstudio/crelyn-studio-website-seo-auditor/releases/tag/v0.4.0-beta.1) is still the public release.
+**Current beta:** `v0.5.0-beta.2` is a local web app for Windows. Download the portable ZIP from [Releases](https://github.com/crelynstudio/crelyn-studio-website-seo-auditor/releases/tag/v0.5.0-beta.2); the earlier Electron beta remains available in release history.
 
 ![English overview of a real scan against a synthetic local sample site](docs/screenshots/web-overview-en.png)
 
@@ -25,6 +25,10 @@ The screenshots come from the running app and a synthetic local sample website. 
 
 The **Settings** page saves language (English or Turkish), page and depth limits, resource checks and private-network permission in this browser. A scan can be stopped. Partial scans are labeled. [Rule details](docs/rules.md).
 
+## Windows portable download
+
+Download `Website-SEO-Auditor-0.5.0-beta.2-win-x64-portable.zip` from [Releases](https://github.com/crelynstudio/crelyn-studio-website-seo-auditor/releases/tag/v0.5.0-beta.2). Extract the ZIP, then double-click `Start Website SEO Auditor.vbs` inside the `Website SEO Auditor` folder. The app opens in your default browser. Use **Settings → Close app** when finished. Keep the extracted folder intact. No Node.js installation is needed for this download.
+
 ## Run from source
 
 On Windows, install Node.js 24 and npm, then run:
@@ -34,7 +38,7 @@ npm ci
 npm run app
 ```
 
-The app opens in your default browser at a random `127.0.0.1` address. Keep the command running while you use the app; press Ctrl+C to stop it. The review candidate does not yet include a one-click Windows download. Developers can also use the [command-line interface](docs/cli.md).
+The app opens in your default browser at a random `127.0.0.1` address. Keep the command running while you use the app; press Ctrl+C to stop it. Developers can also use the [command-line interface](docs/cli.md).
 
 To verify the project:
 

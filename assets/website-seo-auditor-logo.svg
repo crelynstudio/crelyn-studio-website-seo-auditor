@@ -1,5 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Website SEO Auditor">
-  <rect width="64" height="64" rx="16" fill="#696DE2"/>
-  <path d="M14 22 21 43 32 29 43 43 51 21" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M43 43 51 21" fill="none" stroke="#BBBDF6" stroke-width="3" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="logo-title">
+  <title id="logo-title">Website SEO Auditor</title>
+  <defs>
+    <linearGradient id="tile" x1="8" y1="4" x2="56" y2="64" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#696DE2"/>
+      <stop offset="1" stop-color="#2328B7"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#tile)"/>
+  <rect x="1" y="1" width="62" height="62" rx="15" fill="none" stroke="#fff" stroke-opacity=".16"/>
+  <g fill="none" stroke="#BBBDF6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M22 46h-5a4 4 0 0 1-4-4V19a4 4 0 0 1 4-4h28a4 4 0 0 1 4 4v8M13 25h36"/>
+    <path d="M20 20h1m5 0h1"/>
+  </g>
+  <path d="m43 45 8 8" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="35" cy="37" r="12" fill="#2328B7" stroke="#fff" stroke-width="3.5"/>
+  <path d="m29.5 37 3.5 3.5 7-7" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

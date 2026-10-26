@@ -3,6 +3,8 @@ import { createServer, request as httpRequest } from "node:http";
 import { after, test } from "node:test";
 import { once } from "node:events";
 import { startWebServer } from "../../src/web/server.js";
+import { VERSION, PRODUCT } from "../../src/core/types.js";
+import { readFile } from "node:fs/promises";
 
 const site = createServer((req, res) => {
   if (req.url === "/robots.txt") return res.end("User-agent: *\nAllow: /");
@@ -38,10 +40,16 @@ test("local web app serves UI, enforces host/origin and exports a real audit", a
   const home = await fetch(url);
   assert.equal(home.status, 200);
   assert.match(await home.text(), /Website SEO Auditor/);
+  const meta = await (await fetch(`${url}/api/meta`)).json() as { version: string; product: string };
+  const pkg = JSON.parse(await readFile(new URL("../../../package.json", import.meta.url), "utf8")) as { version: string };
+  assert.equal(meta.version, VERSION);
+  assert.equal(meta.version, pkg.version);
+  assert.equal(meta.product, PRODUCT);
   const logo = await fetch(`${url}/logo.svg`);
   assert.equal(logo.status, 200);
   assert.match(logo.headers.get("content-type") ?? "", /image\/svg\+xml/);
-  assert.match(await logo.text(), /#696DE2/);
+  const logoSvg = await logo.text();
+  assert.match(logoSvg, /#696DE2/);
   const badHost = await new Promise<number>((resolve, reject) => {
     const req = httpRequest(
       url,
@@ -111,6 +119,7 @@ test("local web app serves UI, enforces host/origin and exports a real audit", a
   const html = await htmlResponse.text();
   assert.match(html, /Website SEO Auditor/);
   assert.match(html, /data:image\/svg\+xml;base64,/);
+  assert.ok(html.includes(Buffer.from(logoSvg).toString("base64")), "export embeds the same app logo for offline use");
 });
 
 test("closing the local app requires same-origin POST and stops its listener", async () => {

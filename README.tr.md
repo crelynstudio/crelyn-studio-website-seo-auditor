@@ -6,7 +6,7 @@
 
 Site adresini gir, tarama sonuçlarını incele ve aynı tür bulguları etkilenen sayfa, teknik kanıt ve düzeltme önerisiyle birlikte gör. Arayüz tarayıcıda açılır; tarayıcı motoru bilgisayarında çalışır. Hesap, API anahtarı, bulut sunucusu veya Electron gerekmez.
 
-**Durum:** `0.5.0-beta.1` yerel inceleme adayıdır; henüz yayımlanmadı. [Önceki Windows betası](https://github.com/crelynstudio/crelyn-studio-website-seo-auditor/releases/tag/v0.4.0-beta.1) yayımdadır.
+**Güncel beta:** `v0.5.0-beta.2`, Windows için yerel web uygulamasıdır. Taşınabilir ZIP dosyasını [Releases](https://github.com/crelynstudio/crelyn-studio-website-seo-auditor/releases/tag/v0.5.0-beta.2) bölümünden indirebilirsin; önceki Electron betası yayın geçmişinde durur.
 
 ![Yapay yerel sitede gerçek taramanın İngilizce genel bakış ekranı](docs/screenshots/web-overview-en.png)
 
@@ -25,6 +25,10 @@ Görüntüler çalışan uygulamadan ve yapay bir yerel test sitesinden alındı
 
 **Ayarlar** bölümünde dil, sayfa ve derinlik sınırı, dosya kontrolü ve özel ağ izni bu tarayıcıda saklanır. Tarama durdurulabilir; kısmi sonuçlar açıkça işaretlenir. [Kural ayrıntıları](docs/rules.md).
 
+## Windows taşınabilir indirme
+
+[Releases](https://github.com/crelynstudio/crelyn-studio-website-seo-auditor/releases/tag/v0.5.0-beta.2) bölümünden `Website-SEO-Auditor-0.5.0-beta.2-win-x64-portable.zip` dosyasını indirip aç. İçindeki `Website SEO Auditor` klasöründe `Start Website SEO Auditor.vbs` dosyasına çift tıkla. Uygulama varsayılan tarayıcıda açılır. Bitirince **Ayarlar → Uygulamayı kapat** seçeneğini kullan. Çıkartılmış klasörün içeriğini birlikte tut. Bu indirme için ayrıca Node.js kurman gerekmez.
+
 ## Kaynak koddan çalıştırma
 
 Windows'ta Node.js 24 ve npm kur, ardından:
@@ -34,7 +38,7 @@ npm ci
 npm run app
 ```
 
-Uygulama varsayılan tarayıcıda rastgele bir `127.0.0.1` adresiyle açılır. Kullanırken komut çalışmaya devam etmeli; durdurmak için Ctrl+C kullan. Bu inceleme adayında henüz tek tıklamalı Windows paketi yok. Geliştiriciler [komut satırı aracını](docs/cli.md) da kullanabilir.
+Uygulama varsayılan tarayıcıda rastgele bir `127.0.0.1` adresiyle açılır. Kullanırken komut çalışmaya devam etmeli; durdurmak için Ctrl+C kullan. Geliştiriciler [komut satırı aracını](docs/cli.md) da kullanabilir.
 
 Kontroller:
 

@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.5.0-beta.2 — Windows local web beta / Windows yerel web betası, 2026-10-26
+
+- Refresh the app mark with a website window and checked magnifier, retaining the violet palette. The app, browser tab and offline HTML report share the same SVG.
+- Show the running product version in About and expose it in local app metadata; test agreement with the package version.
+- Remove a duplicated stylesheet block while preserving the effective icon weight and mobile layout fixes.
+- Logo, mor palet korunarak web penceresi ve onay işaretli büyüteçle yenilendi; uygulama, tarayıcı sekmesi ve çevrimdışı HTML raporu aynı SVG'yi kullanır.
+- Hakkında ekranına sürüm bilgisi eklendi. Sürüm tutarlılığı ve rapora gömülü logo testle doğrulanır.
+- Etkin ikon kalınlığı ve mobil düzeltmeler korunarak yinelenen stil bloğu kaldırıldı.
+
 ## 0.5.0-beta.1 — local review candidate, 2026-10-26
 
 - Replace the Electron window with a local browser workspace and a loopback-only Node service.

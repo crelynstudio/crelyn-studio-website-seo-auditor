@@ -13,7 +13,7 @@ import { scan } from "../crawler/index.js";
 import { catalog, limitations } from "../i18n/index.js";
 import { redact } from "../reports/privacy.js";
 import { renderHtml } from "../reports/html.js";
-import type { Lang, ScanConfig, ScanReport } from "../core/types.js";
+import { PRODUCT, VERSION, type Lang, type ScanConfig, type ScanReport } from "../core/types.js";
 
 type Progress = { discovered: number; crawled: number; skipped: number };
 const webRoot = new URL("../../../web/", import.meta.url);
@@ -120,6 +120,8 @@ export async function startWebServer(
         return json(res, 403, { code: "BAD_ORIGIN" });
       if (path === "/api/meta" && req.method === "GET")
         return json(res, 200, {
+          product: PRODUCT,
+          version: VERSION,
           catalog,
           limitations: { en: limitations("en"), tr: limitations("tr") },
         });

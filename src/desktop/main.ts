@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, ipcMain, Menu, session, shell } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain, Menu, screen, session, shell } from 'electron';
 import { writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -20,17 +20,22 @@ const externalLinks = new Set([
 let window: BrowserWindow | null = null;
 let activeRun: AbortController | null = null;
 let lastReport: ScanReport | null = null;
+let restoreBounds: Electron.Rectangle | null = null;
 
 function trustedSender(sender: Electron.WebContents): boolean {
   return sender === window?.webContents && !sender.isDestroyed();
 }
 
 function createWindow(): void {
+  const area = screen.getPrimaryDisplay().workArea;
+  const width = Math.min(1152, area.width, Math.floor(area.height * 16 / 9));
+  const height = Math.round(width * 9 / 16);
   window = new BrowserWindow({
-    width: 1220, height: 820, minWidth: 780, minHeight: 600,
+    width, height, minWidth: 640, minHeight: 360, frame: false, maximizable: false, fullscreenable: false,
     backgroundColor: '#F2F3F7', icon: iconPath, title: 'SiteMercek',
     webPreferences: { preload: preloadPath, nodeIntegration: false, contextIsolation: true, sandbox: true, webSecurity: true }
   });
+  window.setAspectRatio(16 / 9);
   window.webContents.setWindowOpenHandler(({ url }) => {
     if (externalLinks.has(url) || /^https:\/\/github\.com\/crelynstudio\/crelyn-studio-website-seo-auditor\/blob\/main\/docs\/rules\.md#[a-z0-9_]+$/.test(url)) {
       void shell.openExternal(url);
@@ -38,13 +43,33 @@ function createWindow(): void {
     return { action: 'deny' };
   });
   window.webContents.on('will-navigate', event => event.preventDefault());
-  window.on('closed', () => { activeRun?.abort(); window = null; });
+  window.on('closed', () => { activeRun?.abort(); window = null; restoreBounds = null; });
   void window.loadFile(htmlPath);
 }
 
 app.whenReady().then(() => {
   Menu.setApplicationMenu(null);
   session.defaultSession.setPermissionRequestHandler((_contents, _permission, callback) => callback(false));
+  ipcMain.handle('window:control', (event, action: unknown) => {
+    if (!trustedSender(event.sender) || !window) return { ok: false };
+    if (action === 'minimize') { window.minimize(); return { ok: true }; }
+    if (action === 'close') { window.close(); return { ok: true }; }
+    if (action === 'toggle-size') {
+      if (restoreBounds) {
+        window.setBounds(restoreBounds);
+        restoreBounds = null;
+      } else {
+        const current = window.getBounds();
+        const area = screen.getDisplayMatching(current).workArea;
+        const width = Math.min(area.width, Math.floor(area.height * 16 / 9));
+        const height = Math.round(width * 9 / 16);
+        restoreBounds = current;
+        window.setBounds({ x: area.x + Math.floor((area.width - width) / 2), y: area.y + Math.floor((area.height - height) / 2), width, height });
+      }
+      return { ok: true, enlarged: Boolean(restoreBounds) };
+    }
+    return { ok: false };
+  });
   ipcMain.handle('audit:start', async (event, request: unknown) => {
     if (!trustedSender(event.sender)) return { ok: false, code: 'UNTRUSTED_WINDOW' };
     if (activeRun) return { ok: false, code: 'SCAN_RUNNING' };

@@ -23,7 +23,8 @@
       saved: path => `Report saved: ${path}`, saveFailed: 'The report could not be saved. Choose another location and try again.',
       invalid: 'Enter a full website address, such as https://example.com.', running: 'A scan is already running.',
       failed: 'The scan could not start. Check the address and try again.', unavailable: 'Run a scan before saving a report.',
-      canceled: 'Scan stopped.', dataNote: 'Static HTML only; JavaScript-rendered content and sign-in pages are not checked.'
+      canceled: 'Scan stopped.', dataNote: 'Static HTML only; JavaScript-rendered content and sign-in pages are not checked.',
+      windowControls: 'Window controls', minimize: 'Minimize', enlarge: 'Enlarge', restore: 'Restore size', close: 'Close'
     },
     tr: {
       skip: 'Ana içeriğe geç', local: 'Raporlar bu cihazda kalır', language: 'Dil', eyebrow: 'Web sitesi denetimi',
@@ -47,7 +48,8 @@
       saved: path => `Rapor kaydedildi: ${path}`, saveFailed: 'Rapor kaydedilemedi. Başka bir konum seçip yeniden dene.',
       invalid: 'https://example.com gibi tam bir site adresi gir.', running: 'Bir tarama zaten sürüyor.',
       failed: 'Tarama başlatılamadı. Adresi kontrol edip yeniden dene.', unavailable: 'Rapor kaydetmeden önce tarama yap.',
-      canceled: 'Tarama durduruldu.', dataNote: 'Yalnızca statik HTML incelenir; JavaScript sonrası içerik ve giriş gerektiren sayfalar kontrol edilmez.'
+      canceled: 'Tarama durduruldu.', dataNote: 'Yalnızca statik HTML incelenir; JavaScript sonrası içerik ve giriş gerektiren sayfalar kontrol edilmez.',
+      windowControls: 'Pencere denetimleri', minimize: 'Küçült', enlarge: 'Büyüt', restore: 'Önceki boyut', close: 'Kapat'
     }
   };
   const $ = id => document.getElementById(id);
@@ -63,12 +65,27 @@
   let catalog = null;
   let limitations = null;
   let busy = false;
+  let enlarged = false;
   const t = key => words[lang][key] ?? key;
+
+  function updateWindowLabels() {
+    const size = $('window-size');
+    const label = t(enlarged ? 'restore' : 'enlarge');
+    size.title = label;
+    size.setAttribute('aria-label', label);
+    size.setAttribute('aria-pressed', String(enlarged));
+  }
 
   function translate() {
     document.documentElement.lang = lang;
     $('language').value = lang;
     document.querySelectorAll('[data-i18n]').forEach(item => { item.textContent = t(item.dataset.i18n); });
+    document.querySelectorAll('[data-i18n-title]').forEach(item => {
+      item.title = t(item.dataset.i18nTitle);
+      item.setAttribute('aria-label', item.title);
+    });
+    document.querySelectorAll('[data-i18n-aria]').forEach(item => item.setAttribute('aria-label', t(item.dataset.i18nAria)));
+    updateWindowLabels();
     $('url').placeholder = 'https://example.com';
     renderResults();
   }
@@ -104,7 +121,7 @@
       const summary = node('summary');
       const title = node('span', undefined, 'issue-title');
       title.append(node('strong', message), node('small', group.ruleId));
-      summary.append(node('span', undefined, 'issue-mark'), title, node('span', t('instances')(group.findings.length), 'issue-count'), node('span', '⌄', 'chevron'));
+      summary.append(node('span', undefined, 'issue-mark'), title, node('span', t('instances')(group.findings.length), 'issue-count'), node('span', undefined, 'chevron'));
       const body = node('div', undefined, 'issue-body');
       body.append(node('h3', t('fix')), node('p', recommendation), node('h3', t('affected')));
       const urls = node('ul', undefined, 'affected');
@@ -171,6 +188,12 @@
     translate();
   });
   $('severity').addEventListener('change', renderResults);
+  for (const [id, action] of [['window-minimize', 'minimize'], ['window-size', 'toggle-size'], ['window-close', 'close']]) {
+    $(id).addEventListener('click', async () => {
+      const result = await window.siteMercek.windowControl(action);
+      if (action === 'toggle-size' && result.ok) { enlarged = result.enlarged; updateWindowLabels(); }
+    });
+  }
   window.siteMercek.onProgress(progress => {
     $('progress-count').textContent = t('progress')(progress.crawled, progress.discovered);
   });
